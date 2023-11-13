@@ -61,10 +61,10 @@ def setNewUser():
 @app.route('/deleteUser',methods=['GET'])
 def deleteUser():
 	name=request.args.get("name")
-	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user delete --domain default {name}'")
 	idCreated=_getIDUserByName(name)
+	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user delete --domain default {name}'")
 	UserBDService.deleteUserByID(idCreated)
 	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'})
 
 if __name__=="__main__":
-	app.run(debug=True,port=1800)
+	app.run(debug=True,host='10.0.10.2',port=1800)

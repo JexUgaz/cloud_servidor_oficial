@@ -6,7 +6,7 @@ class MySQLConnect:
     @staticmethod
     def initialConnection():
         db_config = {
-            'host': '10.20.10.113',
+            'host': '127.0.0.1',
             'user': 'root',
             'password': 'cloudpass',
             'database': 'bd_cloud',
