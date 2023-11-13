@@ -1,7 +1,11 @@
 from flask import Flask,jsonify,request
 import subprocess
+from services.mysql_connect import MySQLConnect
+from services.userBDService import UserBDService
 
 app= Flask(__name__)
+
+MySQLConnect.initialConnection(app)
 
 def runCommand(command):
 	result=subprocess.run("sudo "+command,shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -44,18 +48,23 @@ def _getIDUserByName(name):
 def setNewUser():
 	name=request.form.get('name') #Nombre del usuario a crear [STRING]
 	pswrd=request.form.get('pswrd') #Contraseña del usuario a crear [STRING]
-	rol=request.form.get('rol') #Rol del usuario (Administrador, Usuario) [INT]
+	rol=request.form.get('rol') #id del Rol del usuario (Administrador, Usuario) [INT]
 	email=request.form.get('email') #Email para los correos [STRING]
 	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user create --domain default --password {pswrd} {name}'")
 	idCreated=_getIDUserByName(name)
-	print(f"ID CREADO: {idCreated}")
-	return jsonify({'result':'success','msg':'Usuario creado exitosamente!','id':idCreated}),200
+	result=UserBDService.setNewUser(name,pswrd,email,rol,idCreated)
+	if result:
+		return jsonify({'result':'success','msg':'Usuario creado exitosamente!','id':idCreated})
+	else:
+		return jsonify({'result':'failed','msg':'Ocurrió un error!'})
 
 @app.route('/deleteUser',methods=['GET'])
 def deleteUser():
 	name=request.args.get("name")
 	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user delete --domain default {name}'")
-	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'}),200
+	idCreated=_getIDUserByName(name)
+	UserBDService.deleteUserByID(idCreated)
+	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'})
 
 if __name__=="__main__":
 	app.run(debug=True,host='10.0.10.2',port=1800)
