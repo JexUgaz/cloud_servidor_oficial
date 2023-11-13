@@ -5,7 +5,7 @@ from services.userBDService import UserBDService
 
 app= Flask(__name__)
 
-MySQLConnect.initialConnection(app)
+MySQLConnect.initialConnection()
 
 def runCommand(command):
 	result=subprocess.run("sudo "+command,shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -67,4 +67,4 @@ def deleteUser():
 	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'})
 
 if __name__=="__main__":
-	app.run(debug=True,host='10.0.10.2',port=1800)
+	app.run(debug=True,port=1800)

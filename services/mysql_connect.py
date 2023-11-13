@@ -1,17 +1,17 @@
-from flask_mysqldb import MySQL
+import mysql.connector
 
 class MySQLConnect:
-    mysql = None
+    db_connection = None
 
     @staticmethod
-    def initialConnection(app):
-        # Configuración de la base de datos
-        app.config['MYSQL_HOST'] = 'localhost'  # Cambia a la IP de tu máquina si MySQL está en otro host
-        app.config['MYSQL_PORT'] = 3400  # Cambia al puerto correcto
-        app.config['MYSQL_USER'] = 'root'
-        app.config['MYSQL_PASSWORD'] = 'cloudpass'
-        app.config['MYSQL_DB'] = 'bd_cloud'
-
-        # Inicialización de la extensión MySQL
-        MySQLConnect.mysql = MySQL(app)
+    def initialConnection():
+        db_config = {
+            'host': '10.20.10.113',
+            'user': 'root',
+            'password': 'cloudpass',
+            'database': 'bd_cloud',
+            'port': 3400,
+        }
+        MySQLConnect.db_connection = mysql.connector.connect(**db_config)
+        
     

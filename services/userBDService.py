@@ -3,10 +3,10 @@ from services.mysql_connect import MySQLConnect
 class UserBDService :
     @staticmethod
     def setNewUser(name,password,email,rol,id):
-        connection = MySQLConnect.mysql.connection
+        connection = MySQLConnect.db_connection
         cursor = connection.cursor()
         try:
-            query = "INSERT INTO usuario (id,nombre, password, email, roles_id) VALUES (%s,%s, SHA2(%s, 256), %s, %s)"
+            query = "INSERT INTO usuario (id,nombre, password, email, roles_id) VALUES (%s,%s, SHA2(%s, 256), %s, %s);"
             values = (id,name, password, email, rol)
             cursor.execute(query, values)
             connection.commit()
@@ -16,17 +16,20 @@ class UserBDService :
             return False
         finally:
             cursor.close()
+            #connection.close()
 
     @staticmethod
     def deleteUserByID(id):
-        connection = MySQLConnect.mysql.connection
+        connection = MySQLConnect.db_connection
         cursor = connection.cursor()
         try:
             query = "DELETE FROM usuario WHERE id = %s"
-            cursor.execute(query, (id))
-            MySQLConnect.mysql.connection.commit()
+            cursor.execute(query, (id,))
+            connection.commit()
             return True
         except Exception as e:
             return False
         finally:
             cursor.close()
+            #connection.close()
+
