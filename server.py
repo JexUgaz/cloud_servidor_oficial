@@ -5,8 +5,7 @@ app= Flask(__name__)
 
 def runCommand(command):
 	result=subprocess.run("sudo "+command,shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-	#print(command)
-
+	return result.stdout.strip()
 
 @app.route('/setNewSlice',methods=['POST'])
 def setNewSlice():
@@ -32,8 +31,31 @@ def setNewSlice():
 	#	runCommand(f'python3 createVM.py slice{idVlan}-vm{i} {idVlan} 50{i} {size_ram[i]} {ubicaciones[i]}')
 
 	return jsonify({
-		'msg':'Creado exitosamente!'
+		'msg':'Creado exitosamente!',
+		'idSlice':'50',
+		'ports':['6400','6401','6402','6403'],
+		'hosts':['10.0.0.30','10.0.0.50','10.0.0.30','10.0.0.50']
 	})
+def _getIDUserByName(name):
+	return runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user list' | grep '{name}'"+" | awk '{print $2}'")
+	
+
+@app.route('/setNewUser',methods=['POST'])
+def setNewUser():
+	name=request.form.get('name') #Nombre del usuario a crear [STRING]
+	pswrd=request.form.get('pswrd') #Contraseña del usuario a crear [STRING]
+	rol=request.form.get('rol') #Rol del usuario (Administrador, Usuario) [INT]
+	email=request.form.get('email') #Email para los correos [STRING]
+	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user create --domain default --password {pswrd} {name}'")
+	idCreated=_getIDUserByName(name)
+	print(f"ID CREADO: {idCreated}")
+	return jsonify({'result':'success','msg':'Usuario creado exitosamente!','id':idCreated}),200
+
+@app.route('/deleteUser',methods=['GET'])
+def deleteUser():
+	name=request.args.get("name")
+	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user delete --domain default {name}'")
+	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'}),200
 
 if __name__=="__main__":
-	app.run(debug=True,port=5001)
+	app.run(debug=True,host='10.0.10.2',port=1800)

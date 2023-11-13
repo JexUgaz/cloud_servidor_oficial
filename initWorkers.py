@@ -23,7 +23,7 @@ def runCommandSSH(command,ssh):
 	#print("Salida del comando: "+output)
 
 def test(ssh,interface,name_ovs):
-	runCommandSSH(f'sudo python3 cloud_lab4/initWorker.py {name_ovs} {interface}',ssh)
+	runCommandSSH(f'sudo python3 proyecto/initWorker.py {name_ovs} {interface}',ssh)
 
 if __name__=='__main__':
 	name_ovs= input('Ingrese el nombre del OVS (br-int): ')
