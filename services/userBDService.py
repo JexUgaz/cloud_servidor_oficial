@@ -3,7 +3,7 @@ from services.mysql_connect import MySQLConnect
 class UserBDService :
     @staticmethod
     def getUserByCredentials(name,password):
-        cursor=MySQLConnect.db_connection.cursor(dictionary=True)
+        cursor=MySQLConnect.db_connection.cursor(dictionary=True,buffered=False)
         try:
             query = "select * from bd_cloud.usuario where nombre=%s and password=SHA2(%s,256)"
             cursor.execute(query, (name, password))
