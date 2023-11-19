@@ -8,7 +8,7 @@ class UserBDService :
             query = "select * from bd_cloud.usuario where nombre=%s and password=SHA2(%s,256)"
             cursor.execute(query, (name, password))
             user = cursor.fetchone()
-            return user 
+            return user
         except Exception as e:
             print(f"Exception: {e}")
             return None
