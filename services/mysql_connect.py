@@ -1,9 +1,8 @@
-from abc import ABC, abstractmethod
 import platform
 import mysql.connector
 
-class MySQLConnect(ABC):
-    @abstractmethod
+class MySQLConnect():
+    @staticmethod
     def getConnection():
         sys_op= platform.system()
         if sys_op=="Linux":

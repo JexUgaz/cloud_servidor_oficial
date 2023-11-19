@@ -1,9 +1,9 @@
 from services.mysql_connect import MySQLConnect
 
-class UserBDService(MySQLConnect):
+class UserBDService():
     @staticmethod
     def getUserByCredentials(name,password):
-        connection=super().getConnection()
+        connection=MySQLConnect.getConnection()
         cursor=connection.cursor(dictionary=True,buffered=False)
         try:
             query = "select * from bd_cloud.usuario where nombre=%s and password=SHA2(%s,256)"
@@ -21,7 +21,7 @@ class UserBDService(MySQLConnect):
 
     @staticmethod
     def setNewUser(name,password,email,rol,id):
-        connection=super().getConnection()
+        connection=MySQLConnect.getConnection()
         cursor = connection.cursor()
         try:
             query = "INSERT INTO usuario (id,nombre, password, email, roles_id) VALUES (%s,%s, SHA2(%s, 256), %s, %s);"
@@ -40,7 +40,7 @@ class UserBDService(MySQLConnect):
 
     @staticmethod
     def deleteUserByID(id):
-        connection=super().getConnection()
+        connection=MySQLConnect.getConnection()
         cursor = connection.cursor()
         try:
             query = "DELETE FROM usuario WHERE id = %s"
