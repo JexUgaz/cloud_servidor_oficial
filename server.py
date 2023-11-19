@@ -66,5 +66,16 @@ def deleteUser():
 	UserBDService.deleteUserByID(idCreated)
 	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'})
 
+@app.route('/authenticationUser',methods=['POST'])
+def authenticationUser():
+	name=request.form.get('name')
+	pswrd=request.form.get('pswrd')
+	print(f"Nombre y pass: {name} {pswrd}")
+	result= UserBDService.getUserByCredentials(name=name,password=pswrd)
+	if result==None:
+		return jsonify({'result':'failed','msg':'Ocurrió un error!'})
+	else: 
+		return jsonify({'result':'success','msg':'Usuario encontrado exitosamente!','user':result})
+
 if __name__=="__main__":
 	app.run(debug=True,port=1800)

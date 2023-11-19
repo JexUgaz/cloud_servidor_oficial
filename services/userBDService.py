@@ -2,6 +2,20 @@ from services.mysql_connect import MySQLConnect
 
 class UserBDService :
     @staticmethod
+    def getUserByCredentials(name,password):
+        cursor=MySQLConnect.db_connection.cursor(dictionary=True)
+        try:
+            query = "select * from bd_cloud.usuario where nombre=%s and password=SHA2(%s,256)"
+            cursor.execute(query, (name, password))
+            user = cursor.fetchone()
+            return user 
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            cursor.close()
+
+    @staticmethod
     def setNewUser(name,password,email,rol,id):
         connection = MySQLConnect.db_connection
         cursor = connection.cursor()
@@ -16,7 +30,6 @@ class UserBDService :
             return False
         finally:
             cursor.close()
-            #connection.close()
 
     @staticmethod
     def deleteUserByID(id):
@@ -31,5 +44,4 @@ class UserBDService :
             return False
         finally:
             cursor.close()
-            #connection.close()
 
