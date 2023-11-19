@@ -1,11 +1,10 @@
+from abc import ABC, abstractmethod
 import platform
 import mysql.connector
 
-class MySQLConnect:
-    db_connection = None
-
-    @staticmethod
-    def initialConnection():
+class MySQLConnect(ABC):
+    @abstractmethod
+    def getConnection():
         sys_op= platform.system()
         if sys_op=="Linux":
             hostMySQL= '127.0.0.1'
@@ -18,6 +17,6 @@ class MySQLConnect:
             'database': 'bd_cloud',
             'port': 3400,
         }
-        MySQLConnect.db_connection = mysql.connector.connect(**db_config)
+        return mysql.connector.connect(**db_config)
         
     

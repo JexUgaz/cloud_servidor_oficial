@@ -1,9 +1,10 @@
 from services.mysql_connect import MySQLConnect
 
-class UserBDService :
+class UserBDService(MySQLConnect):
     @staticmethod
     def getUserByCredentials(name,password):
-        cursor=MySQLConnect.db_connection.cursor(dictionary=True,buffered=False)
+        connection=super().getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
         try:
             query = "select * from bd_cloud.usuario where nombre=%s and password=SHA2(%s,256)"
             cursor.execute(query, (name, password))
@@ -13,11 +14,14 @@ class UserBDService :
             print(f"Exception: {e}")
             return None
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
 
     @staticmethod
     def setNewUser(name,password,email,rol,id):
-        connection = MySQLConnect.db_connection
+        connection=super().getConnection()
         cursor = connection.cursor()
         try:
             query = "INSERT INTO usuario (id,nombre, password, email, roles_id) VALUES (%s,%s, SHA2(%s, 256), %s, %s);"
@@ -29,11 +33,14 @@ class UserBDService :
             print(f"Exception: {e}")
             return False
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
 
     @staticmethod
     def deleteUserByID(id):
-        connection = MySQLConnect.db_connection
+        connection=super().getConnection()
         cursor = connection.cursor()
         try:
             query = "DELETE FROM usuario WHERE id = %s"
@@ -43,5 +50,8 @@ class UserBDService :
         except Exception as e:
             return False
         finally:
-            cursor.close()
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
 

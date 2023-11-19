@@ -6,8 +6,6 @@ from services.userBDService import UserBDService
 
 app= Flask(__name__)
 
-MySQLConnect.initialConnection()
-
 def runCommand(command):
 	result=subprocess.run("sudo "+command,shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	return result.stdout.strip()
