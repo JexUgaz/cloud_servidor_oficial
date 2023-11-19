@@ -1,3 +1,4 @@
+import platform
 from flask import Flask,jsonify,request
 import subprocess
 from services.mysql_connect import MySQLConnect
@@ -78,4 +79,9 @@ def authenticationUser():
 		return jsonify({'result':'success','msg':'Usuario encontrado exitosamente!','user':result})
 
 if __name__=="__main__":
-	app.run(debug=True,host='10.0.10.2',port=1800)
+	sys_op= platform.system()
+	if sys_op=="Linux":
+		app.run(debug=True,host='10.0.10.2',port=1800)
+	elif sys_op=="Windows":
+		app.run(debug=True,port=1800)
+
