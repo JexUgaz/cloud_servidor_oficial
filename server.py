@@ -83,7 +83,7 @@ def setNewImage():
 	idUser=request.form.get('idUser')
 	nombre=request.form.get('nombre')
 	print(f"Data: {nombre} | {idUser} | {link}")
-	out=runCommand("sh -c \". ~/env-scripts/admin-openrc;openstack image list | grep '"+nombre+"' | awk '{print $4}'\"")
+	out=runCommand("sh -c \". ~/env-scripts/admin-openrc;openstack image list | grep -w '"+nombre+"' | awk '{print $4}'\"")
 	print("LLEGAMOS HASTA ACA")
 	print(f"Salida: {out}")
 	if out:
