@@ -83,9 +83,8 @@ def setNewImage():
 	nombre=request.form.get('nombre')
 	name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
 	runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
-	out=runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
-	print(out)
-	return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -name "{name_image}"')})
+	runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
+	return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')})
 
 if __name__=="__main__":
 	sys_op= platform.system()
