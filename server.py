@@ -79,8 +79,9 @@ def authenticationUser():
 def setNewImage():
 	#http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
 	link=request.form.get('link')
+	idUser=request.form.get('idUser')
 	name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
-	runCommand(f"wget {link} && mv {name_image} ~/../imagenes/")
+	runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{{idUser}}/")
 	return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -name "{name_image}"')})
 
 if __name__=="__main__":
