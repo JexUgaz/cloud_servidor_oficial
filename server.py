@@ -75,6 +75,13 @@ def authenticationUser():
 		return jsonify({'result':'failed','msg':'Ocurrió un error!'})
 	else: 
 		return jsonify({'result':'success','msg':'Usuario encontrado exitosamente!','user':result})
+@app.route('/setNewImage',methods=['POST'])
+def setNewImage():
+	#http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+	link=request.form.get('link')
+	name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
+	runCommand(f"wget {link} && mv {name_image} ~/../imagenes/")
+	return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -name "{name_image}"')})
 
 if __name__=="__main__":
 	sys_op= platform.system()
