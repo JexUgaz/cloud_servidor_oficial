@@ -80,8 +80,11 @@ def setNewImage():
 	#http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
 	link=request.form.get('link')
 	idUser=request.form.get('idUser')
+	nombre=request.form.get('nombre')
 	name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
-	runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{{idUser}}/")
+	runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
+	out=runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
+	print(out)
 	return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -name "{name_image}"')})
 
 if __name__=="__main__":
