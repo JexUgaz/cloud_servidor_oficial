@@ -92,4 +92,3 @@ if __name__=="__main__":
 		app.run(debug=True,host='10.0.10.2',port=1800)
 	elif sys_op=="Windows":
 		app.run(debug=True,port=1800)
-
