@@ -89,9 +89,14 @@ def setNewImage():
 		return jsonify({'result':'failed','msg':f'Ya existe una imagen con el nombre: {nombre}'})
 	else:
 		name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
-		runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
-		runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
-		return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')})
+		out2=runCommand(f"[ -e ~/imagenes/{idUser}/{name_image} ] && echo 'El archivo o directorio existe'")
+		if out2:
+			return jsonify({'result':'failed','msg':f'Ya existe descargado esta imagen: {name_image}'})		
+		else:
+			runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
+			runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
+			return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')})
+
 if __name__=="__main__":
 	sys_op= platform.system()
 	if sys_op=="Linux":
