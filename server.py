@@ -85,14 +85,13 @@ def setNewImage():
 	out=runCommand("sh -c \". ~/env-scripts/admin-openrc;openstack image list | grep '"+nombre+"' | awk '{print $4}'\"")
 	print("LLEGAMOS HASTA ACA")
 	print(f"Salida: {out}")
-	if !out:
+	if out:
+		return jsonify({'result':'failed','msg':f'Ya existe una imagen con el nombre: {nombre}'})
+	else:
 		name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
 		runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
 		runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
 		return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')})
-	else:
-		return jsonify({'result':'failed','msg':f'Ya existe una imagen con el nombre: {nombre}'})
-
 if __name__=="__main__":
 	sys_op= platform.system()
 	if sys_op=="Linux":
