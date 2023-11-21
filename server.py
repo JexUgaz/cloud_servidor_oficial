@@ -1,6 +1,7 @@
 import platform
 from flask import Flask,jsonify,request
 import subprocess
+from services.imageBDService import ImageBDService
 from services.mysql_connect import MySQLConnect
 from services.userBDService import UserBDService
 
@@ -95,7 +96,9 @@ def setNewImage():
 		else:
 			runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
 			runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
-			return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')})
+			path=runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')
+			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser)
+			return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':path})
 
 if __name__=="__main__":
 	sys_op= platform.system()
