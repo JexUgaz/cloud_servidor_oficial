@@ -92,12 +92,12 @@ def setNewImage():
 		name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
 		out2=runCommand(f"[ -e ~/imagenes/{idUser}/{name_image} ] && echo 'El archivo o directorio existe'")
 		if out2:
-			return jsonify({'result':'failed','msg':f'Ya existe descargado esta imagen: {name_image}'})		
+			return jsonify({'result':'failed','msg':f'Ya existe descargado esta imagen: {name_image}'})
 		else:
 			runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
 			runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
 			path=runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')
-			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser)
+			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser) #Guardamos en la BD MySQL
 			return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':path})
 
 if __name__=="__main__":
