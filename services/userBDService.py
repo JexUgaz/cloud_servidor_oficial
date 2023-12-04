@@ -1,3 +1,5 @@
+from typing import List
+from entities.UserEntity import UsuarioEntity
 from services.mysql_connect import MySQLConnect
 
 class UserBDService():
@@ -32,6 +34,31 @@ class UserBDService():
         except Exception as e:
             print(f"Exception: {e}")
             return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    @staticmethod
+    def getUsuarios() -> List[UsuarioEntity]:
+        connection = MySQLConnect.getConnection()
+        cursor = connection.cursor()
+
+        try:
+            query = "SELECT id, nombre, email, roles_id FROM usuario;"
+            cursor.execute(query)
+            usuarios_data = cursor.fetchall()
+
+            usuarios = [
+                UsuarioEntity(id=usuario[0], nombre=usuario[1], email=usuario[2], roles_id=usuario[3])
+                for usuario in usuarios_data
+            ]
+            usuarios_serializable = [usuario.to_dict() for usuario in usuarios]
+
+            return usuarios_serializable
+        except Exception as e:
+            print(f"Exception: {e}")
+            return []
         finally:
             if cursor:
                 cursor.close()
