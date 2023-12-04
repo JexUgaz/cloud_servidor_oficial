@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from config.helpers import getIDUserByName, runCommand
+from config.helpers import MensajeResultados, getIDUserByName, runCommand
 from services.userBDService import UserBDService
 
 admin_routes = Blueprint('admin_routes', __name__)
@@ -10,9 +10,9 @@ def deleteUser():
 	idCreated=getIDUserByName(name)
 	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user delete --domain default {name}'")
 	UserBDService.deleteUserByID(idCreated)
-	return jsonify({'result':'success','msg':'Usuario eliminado exitosamente!'})
+	return jsonify({'result':MensajeResultados.success,'msg':'Usuario eliminado exitosamente!'})
 
 @admin_routes.route('/listUser',methods=['GET'])
 def listUser():
 	usuarios=UserBDService.getUsuarios()
-	return jsonify({'result':'success','usuarios':usuarios})
+	return jsonify({'result':MensajeResultados.success,'usuarios':usuarios})

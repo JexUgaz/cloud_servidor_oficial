@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from config.helpers import getIDUserByName, runCommand
+from config.helpers import MensajeResultados, getIDUserByName, runCommand
 from services.imageBDService import ImageBDService
 from services.userBDService import UserBDService
 
@@ -12,9 +12,9 @@ def authenticationUser():
 	print(f"Nombre y pass: {name} {pswrd}")
 	result= UserBDService.getUserByCredentials(name=name,password=pswrd)
 	if result==None:
-		return jsonify({'result':'failed','msg':'Ocurrió un error!'})
+		return jsonify({'result':MensajeResultados.failed,'msg':'Ocurrió un error!'})
 	else: 
-		return jsonify({'result':'success','msg':'Usuario encontrado exitosamente!','user':result})
+		return jsonify({'result':MensajeResultados.success,'msg':'Usuario encontrado exitosamente!','user':result})
 	
 
 @user_routes.route('/setNewImage',methods=['POST'])
@@ -28,18 +28,18 @@ def setNewImage():
 	print("LLEGAMOS HASTA ACA")
 	print(f"Salida: {out}")
 	if out:
-		return jsonify({'result':'failed','msg':f'Ya existe una imagen con el nombre: {nombre}'})
+		return jsonify({'result':MensajeResultados.failed,'msg':f'Ya existe una imagen con el nombre: {nombre}'})
 	else:
 		name_image = link.split("/")[-1] #cirros-0.4.0-x86_64-disk.img
 		out2=runCommand(f"[ -e ~/imagenes/{idUser}/{name_image} ] && echo 'El archivo o directorio existe'")
 		if out2:
-			return jsonify({'result':'failed','msg':f'Ya existe descargado esta imagen: {name_image}'})
+			return jsonify({'result':MensajeResultados.failed,'msg':f'Ya existe descargado esta imagen: {name_image}'})
 		else:
 			runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
 			runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
 			path=runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')
 			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser) #Guardamos en la BD MySQL
-			return jsonify({'result':'success','msg':'Se descargó exitosamente!','path':path})
+			return jsonify({'result':MensajeResultados.success,'msg':'Se descargó exitosamente!','path':path})
 
 
 @user_routes.route('/setNewSlice',methods=['POST'])
@@ -66,6 +66,7 @@ def setNewSlice():
 	#	runCommand(f'python3 createVM.py slice{idVlan}-vm{i} {idVlan} 50{i} {size_ram[i]} {ubicaciones[i]}')
 
 	return jsonify({
+		'result':MensajeResultados.success,
 		'msg':'Creado exitosamente!',
 		'idSlice':'50',
 		'ports':['6400','6401','6402','6403'],
@@ -82,6 +83,6 @@ def setNewUser():
 	idCreated=getIDUserByName(name)
 	result=UserBDService.setNewUser(name,pswrd,email,rol,idCreated)
 	if result:
-		return jsonify({'result':'success','msg':'Usuario creado exitosamente!','id':idCreated})
+		return jsonify({'result':MensajeResultados.success,'msg':'Usuario creado exitosamente!','id':idCreated})
 	else:
-		return jsonify({'result':'failed','msg':'Ocurrió un error!'})
+		return jsonify({'result':MensajeResultados.failed,'msg':'Ocurrió un error!'})
