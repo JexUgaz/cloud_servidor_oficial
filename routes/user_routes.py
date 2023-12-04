@@ -39,7 +39,7 @@ def setNewImage():
 			runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/cirros-0.4.0-x86_64-disk.img --disk-format qcow2 --container-format bare --visibility=public'")
 			path=runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')
 			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser) #Guardamos en la BD MySQL
-			return jsonify({'result':MensajeResultados.success,'msg':'Se descargó exitosamente!','path':path})
+			return jsonify({'result':MensajeResultados.success,'msg':'Se creó exitosamente la imagen!','path':path})
 
 
 @user_routes.route('/setNewSlice',methods=['POST'])
