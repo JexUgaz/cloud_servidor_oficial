@@ -46,7 +46,7 @@ class ImageBDService:
         cursor=connection.cursor(dictionary=True,buffered=False)
         try:
             query = "select * from imagenes where id=%s"
-            cursor.execute(query, (id,))
+            cursor.execute(query, (idImage,))
             json = cursor.fetchone()
             
             if cursor.rowcount == 0:
