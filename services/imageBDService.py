@@ -20,6 +20,49 @@ class ImageBDService:
                 cursor.close()
             if connection.is_connected():
                 connection.close()
+                
+    @staticmethod
+    def deleteImage(idImage):
+        connection=MySQLConnect.getConnection()
+        cursor = connection.cursor()
+        try:
+            query = "DELETE FROM imagenes WHERE id=%s;"
+            values = (idImage,)
+            cursor.execute(query, values)
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    
+    @staticmethod
+    def getImageById(idImage):
+        connection=MySQLConnect.getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
+        try:
+            query = "select * from imagenes where id=%s"
+            cursor.execute(query, (id,))
+            json = cursor.fetchone()
+            
+            if cursor.rowcount == 0:
+                return ImagenEntity(id=None,nombre=None,email=None,roles_id=None)
+
+            image=ImagenEntity.convertToImagen(json=json)
+            return image
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    
     @staticmethod
     def getImagesByUser(idUser):
         connection = MySQLConnect.getConnection()
