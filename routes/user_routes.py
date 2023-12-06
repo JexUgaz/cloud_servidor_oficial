@@ -41,6 +41,49 @@ def setNewImage():
 			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser) #Guardamos en la BD MySQL
 			return jsonify({'result':MensajeResultados.success,'msg':'Se creó exitosamente la imagen!','path':path})
 
+@user_routes.route('/getUserById',methods=['GET'])
+def getUserById():
+	idUser=request.args.get("idUser")
+	user=UserBDService.getUserById(id=idUser)
+	if(user is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Ups! Ocurrió un error'
+		})
+	elif (user.id is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':f'No existe el usuario con el id {idUser}'
+		})
+	else:
+		return jsonify({
+			'result':MensajeResultados.success,
+			'msg':'Se encontró exitosamente al usuario!',
+			'user':user.to_dict()
+		})
+
+@user_routes.route('/getImagesByUser',methods=['GET'])
+def getImagesByUser():
+	idUser=request.args.get("idUser")
+	imagenes=ImageBDService.getImagesByUser(idUser=idUser)
+
+	if(imagenes is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Ups! Ocurrió un error'
+		})
+	elif (len(imagenes) == 0):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':f'El usuario: "{idUser}" no tiene imagenes!'
+		})
+	else:
+		return jsonify({
+			'result':MensajeResultados.success,
+			'msg':'Se encontró exitosamente las imágenes!',
+			'imagenes':imagenes
+		})
+
 
 @user_routes.route('/setNewSlice',methods=['POST'])
 def setNewSlice():

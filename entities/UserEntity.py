@@ -13,5 +13,14 @@ class UsuarioEntity:
             'roles_id': self.roles_id
         }
 
+    @staticmethod
+    def convertToUser(json):
+        return UsuarioEntity(
+            id=json['id'],
+            nombre=json['nombre'],
+            email=json['email'],
+            roles_id=json['roles_id']
+        )
+
     def __str__(self):
         return f"Usuario(id={self.id}, nombre={self.nombre}, email={self.email}, roles_id={self.roles_id})"

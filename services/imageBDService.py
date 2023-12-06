@@ -1,3 +1,4 @@
+from entities.ImagenEntity import ImagenEntity
 from services.mysql_connect import MySQLConnect
 
 class ImageBDService:
@@ -14,6 +15,32 @@ class ImageBDService:
         except Exception as e:
             print(f"Exception: {e}")
             return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    @staticmethod
+    def getImagesByUser(idUser):
+        connection = MySQLConnect.getConnection()
+        cursor = connection.cursor(dictionary=True, buffered=False)
+        
+        try:
+            query = "select * from imagenes where usuario_id=%s"
+            cursor.execute(query, (idUser,))
+
+            result = []
+            for row in cursor.fetchall():
+                imagen = ImagenEntity.convertToImagen(json=row)
+                result.append(imagen.to_dict())
+            
+            if cursor.rowcount == 0:
+                return []
+
+            return result
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
         finally:
             if cursor:
                 cursor.close()
