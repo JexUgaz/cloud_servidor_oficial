@@ -47,9 +47,13 @@ def deleteImage():
 	elif image.id is None:
 		return jsonify({'result':MensajeResultados.failed,'msg':f'No existe una imagen con el id: {idImage}'})
 	else:
-		runCommand(f"rm -f {image.path}")
-		runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack image delete {image.nombre}'")
-		return jsonify({'result':MensajeResultados.success,'msg':f'Se eliminó exitosamente la imagen {image.nombre}'})
+		result=ImageBDService.deleteImage(idImage=image.id)
+		if(result):		
+			runCommand(f"rm -f {image.path}")
+			runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack image delete {image.nombre}'")
+			return jsonify({'result':MensajeResultados.success,'msg':f'Se eliminó exitosamente la imagen {image.nombre}'})
+		else:
+			return jsonify({'result':MensajeResultados.failed,'msg':'Error en la BD ocurrido!'})
 
 @user_routes.route('/getUserById',methods=['GET'])
 def getUserById():
