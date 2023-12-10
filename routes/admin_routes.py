@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, getIDUserByName, runCommand
+from scripts.uso_real_recursos import monitorear_uso_recursos
 from services.userBDService import UserBDService
 
 admin_routes = Blueprint('admin_routes', __name__)
@@ -16,3 +17,7 @@ def deleteUser():
 def listUser():
 	usuarios=UserBDService.getUsuarios()
 	return jsonify({'result':MensajeResultados.success,'usuarios':usuarios})
+
+@admin_routes.route('/getMonitoreoRecursos,',methods=['GET'])
+def getMonitoreoRecursos():
+	monitorear_uso_recursos()
