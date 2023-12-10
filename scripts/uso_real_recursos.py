@@ -126,8 +126,8 @@ def monitorear_uso_recursos():
 
     # Iterar sobre los workers y obtener información de CPU y memoria
     for worker_info in workers:
-        tiempos_idle = obtener_tiempos_idle_desde_csv(f"worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
-        idle_real=obtener_tiempos_idle_desde_csv_Real(f"worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
+        tiempos_idle = obtener_tiempos_idle_desde_csv(f"~/monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
+        idle_real=obtener_tiempos_idle_desde_csv_Real(f"~/monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
         
         if idle_real is not None and len(idle_real) == 2:
             tiempo_idle1, tiempo_idle2 = idle_real
