@@ -23,10 +23,7 @@ def setNewImage():
 	link=request.form.get('link')
 	idUser=request.form.get('idUser')
 	nombre=request.form.get('nombre')
-	print(f"Data: {nombre} | {idUser} | {link}")
 	out=runCommand("sh -c \". ~/env-scripts/admin-openrc;openstack image list | grep -w '"+nombre+"' | awk '{print $4}'\"")
-	print("LLEGAMOS HASTA ACA")
-	print(f"Salida: {out}")
 	if out:
 		return jsonify({'result':MensajeResultados.failed,'msg':f'Ya existe una imagen con el nombre: {nombre}'})
 	else:
@@ -40,6 +37,23 @@ def setNewImage():
 			path=runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')
 			ImageBDService.setNewImage(path=path,nombre=nombre,usuario_id=idUser) #Guardamos en la BD MySQL
 			return jsonify({'result':MensajeResultados.success,'msg':'Se creó exitosamente la imagen!','path':path})
+
+@user_routes.route('/deleteImage',methods=['GET'])
+def deleteImage():
+	idImage=request.args.get('idImage')
+	image=ImageBDService.getImageById(idImage=idImage)
+	if image is None:
+		return jsonify({'result':MensajeResultados.failed,'msg':'Ocurrió un error!'})
+	elif image.id is None:
+		return jsonify({'result':MensajeResultados.failed,'msg':f'No existe una imagen con el id: {idImage}'})
+	else:
+		result=ImageBDService.deleteImage(idImage=image.id)
+		if(result):		
+			runCommand(f"rm -f {image.path}")
+			runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack image delete {image.nombre}'")
+			return jsonify({'result':MensajeResultados.success,'msg':f'Se eliminó exitosamente la imagen {image.nombre}'})
+		else:
+			return jsonify({'result':MensajeResultados.failed,'msg':'Error en la BD ocurrido!'})
 
 @user_routes.route('/getUserById',methods=['GET'])
 def getUserById():
