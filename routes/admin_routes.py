@@ -18,7 +18,7 @@ def listUser():
 	usuarios=UserBDService.getUsuarios()
 	return jsonify({'result':MensajeResultados.success,'usuarios':usuarios})
 
-@admin_routes.route('/getMonitoreoRecursos,',methods=['GET'])
+@admin_routes.route('/getMonitoreoRecursos',methods=['GET'])
 def getMonitoreoRecursos():
 	print("SE INGRESÓ")
 	monitorear_uso_recursos()

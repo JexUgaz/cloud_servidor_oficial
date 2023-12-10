@@ -176,7 +176,6 @@ def monitorear_uso_recursos():
 
     print("\nTabla  del uso del sistema de cada worker:")
     print(tabla_uso_sistema_consolidado)
-    input("Ingrese Enter...")
-
+    
 # Llamada a la función general
 #monitorear_uso_recursos()
