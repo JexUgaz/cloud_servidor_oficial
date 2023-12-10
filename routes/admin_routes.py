@@ -20,6 +20,5 @@ def listUser():
 
 @admin_routes.route('/getMonitoreoRecursos',methods=['GET'])
 def getMonitoreoRecursos():
-	print("SE INGRESÓ")
 	monitorear_uso_recursos()
 	return jsonify({'result':MensajeResultados.success,'msg':'Exitoso!!'})

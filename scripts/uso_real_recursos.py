@@ -5,7 +5,6 @@ import csv
 from datetime import datetime
 def obtener_tiempos_idle_desde_csv_Real(csv_path):
     tiempos_idle = []
-
     try:
         with open(csv_path, mode='r') as archivo_csv:
             csv_reader = csv.reader(archivo_csv)
@@ -17,7 +16,6 @@ def obtener_tiempos_idle_desde_csv_Real(csv_path):
 
         # Tomar los dos últimos valores si hay más de dos
         tiempos_idle = tiempos_idle[-2:]
-
         return tiempos_idle
 
     except Exception as e:
@@ -126,18 +124,18 @@ def monitorear_uso_recursos():
 
     # Iterar sobre los workers y obtener información de CPU y memoria
     for worker_info in workers:
-        tiempos_idle = obtener_tiempos_idle_desde_csv(f"~/monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
-        idle_real=obtener_tiempos_idle_desde_csv_Real(f"~/monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
+        tiempos_idle = obtener_tiempos_idle_desde_csv(f"../monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
+        idle_real=obtener_tiempos_idle_desde_csv_Real(f"../monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
         
         if idle_real is not None and len(idle_real) == 2:
             tiempo_idle1, tiempo_idle2 = idle_real
-            print(f"Tiempo Idle 1 para {worker_info[0]}: {tiempo_idle1}")
-            print(f"Tiempo Idle 2 para {worker_info[0]}: {tiempo_idle2}")
+            #print(f"Tiempo Idle 1 para {worker_info[0]}: {tiempo_idle1}")
+            #print(f"Tiempo Idle 2 para {worker_info[0]}: {tiempo_idle2}")
 
             if tiempos_idle is not None and len(tiempos_idle) == 2:
                 tiempo_registro1, tiempo_registro2 = tiempos_idle
-                print(f"Tiempo de Registro 1 para {worker_info[0]}: {tiempo_registro1}")
-                print(f"Tiempo de Registro 2 para {worker_info[0]}: {tiempo_registro2}")
+                #print(f"Tiempo de Registro 1 para {worker_info[0]}: {tiempo_registro1}")
+                #print(f"Tiempo de Registro 2 para {worker_info[0]}: {tiempo_registro2}")
                 
                 cant_cores = 5  
 
@@ -145,7 +143,7 @@ def monitorear_uso_recursos():
                 tiempo_espera = calcular_tiempo_espera(tiempo_registro1, tiempo_registro2)
 
                 if tiempo_espera is not None:
-                    print(f"Tiempo de Espera para {worker_info[0]}: {tiempo_espera} segundos")
+                    #print(f"Tiempo de Espera para {worker_info[0]}: {tiempo_espera} segundos")
 
                     # Calcular los porcentajes según la fórmula proporcionada
                     fraccion_no_usado_sistema = (tiempo_idle2 - tiempo_idle1) / (cant_cores * tiempo_espera * 100)
