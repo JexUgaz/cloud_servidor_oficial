@@ -20,5 +20,5 @@ def listUser():
 
 @admin_routes.route('/getMonitoreoRecursos',methods=['GET'])
 def getMonitoreoRecursos():
-	monitorear_uso_recursos()
-	return jsonify({'result':MensajeResultados.success,'msg':'Exitoso!!'})
+	filas_memoria_consolidada_matrix,filas_uso_sistema_consolidado_matrix=monitorear_uso_recursos()
+	return jsonify({'result':MensajeResultados.success,'msg':'Exitoso!!','memoria_workers':filas_memoria_consolidada_matrix,'uso_sistema_workers':filas_uso_sistema_consolidado_matrix})

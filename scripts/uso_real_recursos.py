@@ -122,6 +122,8 @@ def monitorear_uso_recursos():
     tabla_uso_sistema_consolidado = PrettyTable()
     tabla_uso_sistema_consolidado.field_names = ["Worker", "Porcentaje Sistema Usado", "Porcentaje Sistema No Usado", "Cores Usados", "Tiempo de Espera"]
 
+    tabla_memoria_consolidada_matrix =[]
+    tabla_uso_sistema_consolidado_matrix=[]
     # Iterar sobre los workers y obtener información de CPU y memoria
     for worker_info in workers:
         tiempos_idle = obtener_tiempos_idle_desde_csv(f"../monitoreo/worker{workers.index(worker_info) + 1}_tiempos_idle.csv")
@@ -157,15 +159,18 @@ def monitorear_uso_recursos():
 
                     if memoria_info is not None:
                         memoria_total, memoria_usada, memoria_libre = memoria_info
-
+                        new_row=[worker_info[0], memoria_total, memoria_usada, memoria_libre]
                         # Agregar información a la tabla consolidada de memoria
-                        tabla_memoria_consolidada.add_row([worker_info[0], memoria_total, memoria_usada, memoria_libre])
-
+                        tabla_memoria_consolidada.add_row(new_row)
+                        tabla_memoria_consolidada_matrix.append(new_row)
                     if porcentaje_cpu_worker is not None:
                         # Agregar información a la tabla consolidada de uso del sistema
-                        tabla_uso_sistema_consolidado.add_row([worker_info[0], round(fraccion_usado_sistema * 100, 2),
+                        new_row=[worker_info[0], round(fraccion_usado_sistema * 100, 2),
                                                             round(fraccion_no_usado_sistema * 100, 2), round(core_usados, 2),
-                                                            tiempo_espera])
+                                                            tiempo_espera]
+                        tabla_uso_sistema_consolidado.add_row(new_row)
+                        tabla_uso_sistema_consolidado_matrix.append(new_row)
+                        
 
     # Imprimir tablas consolidadas al final
     print("\nTabla del uso de memoria de cada worker:")
@@ -174,6 +179,7 @@ def monitorear_uso_recursos():
 
     print("\nTabla  del uso del sistema de cada worker:")
     print(tabla_uso_sistema_consolidado)
+    return tabla_memoria_consolidada_matrix,tabla_uso_sistema_consolidado_matrix
     
 # Llamada a la función general
 #monitorear_uso_recursos()
