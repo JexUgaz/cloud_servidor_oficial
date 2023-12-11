@@ -15,8 +15,8 @@ class SliceBDService:
             """
             values = (cnt_nodos,nombre_dhcp,id_topologia,id_infraestructura,id_usuario,id_subred,nombre)
             cursor.execute(query, values)
-            result =cursor.fetchone()
-            nuevo_id = result[0] if result else None
+            result =cursor.fetchall()
+            nuevo_id = result[0][0] if result else None
 
             connection.commit()
         
