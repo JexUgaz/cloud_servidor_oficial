@@ -1,5 +1,6 @@
 from email.mime.text import MIMEText
 import smtplib
+import socket
 import subprocess
 from config.globals import EmailParams
 from services.userBDService import UserBDService
@@ -38,3 +39,12 @@ def sendMail(msg, receptor, subject):
     conn.quit()
 
     print('Email enviado correctamente al destinatario!!')
+
+def find_available_portVNC(starting_port=5901):
+    while True:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('localhost', starting_port))
+                return starting_port-5900
+        except socket.error:
+            starting_port += 1

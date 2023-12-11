@@ -2,7 +2,9 @@ from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, runCommand
 from services.imageBDService import ImageBDService
 from services.subredesBDService import SubredesBDService
+from services.topologiaBDService import TopologiaBDService
 from services.userBDService import UserBDService
+from slice_DHCP import init_DHCP
 
 user_routes = Blueprint('user_routes', __name__)
 
@@ -99,6 +101,22 @@ def getImagesByUser():
 			'imagenes':imagenes
 		})
 
+@user_routes.route('/getAllTopologias',methods=['GET'])
+def getImagesByUser():
+	topologias=TopologiaBDService.getAllTopologias()
+
+	if(topologias is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Ups! Ocurrió un error'
+		})
+	else:
+		return jsonify({
+			'result':MensajeResultados.success,
+			'msg':'Se encontró exitosamente las topologías!',
+			'topologias':topologias
+		})
+
 
 @user_routes.route('/setNewSlice',methods=['POST'])
 def setNewSlice():
@@ -106,20 +124,18 @@ def setNewSlice():
 	idVlan='50' #La VLAN lo sacara el propio servidor de la BD, id del Slice
 	
 	idTopologia= request.form.get('idTopologia') # ID de la Topología
-	idUser=request.form.get('idUser') #ID del usuario, por ahora no lo usamos
 	n_Vms= request.form.get('n_Vms') # 4 : Número de VMs
 	ubicaciones= request.form.getlist('ubicaciones') # 0,2, 0, 2 : WORKER1, WORKER3, WORKER1, WORKER3
 	size_ram=request.form.getlist('size_ram') # 100,100,100,100 : 100Mbytes memoria RAM
 
 	print(f"Topología: {idTopologia}")
-	print(f"User: {idUser}")
+	#print(f"User: {idUser}")
 	print(f"N° Vms: {n_Vms}")
 	print(f"Ubicaciones: {ubicaciones}")
 	print(f"Tamaño: {size_ram}")
 	
-
-	#runCommand(f'python3 slice_DHCP.py br-int {idVlan} 192.168.10.0/24 192.168.10.5 192.168.10.10')
-
+	#init_DHCP(vlan_id=,dir_net=)
+	
 	#2 VMs hasta 5 VMs
 	#for i in range(len(ubicaciones)):
 	#	runCommand(f'python3 createVM.py slice{idVlan}-vm{i} {idVlan} 50{i} {size_ram[i]} {ubicaciones[i]}')
