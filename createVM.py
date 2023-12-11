@@ -17,7 +17,7 @@ def init_VM(vlan_id,port_vnc,size_ram,id_worker,path,mac_addr,name_ovs='br-vlan'
 
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	
-	ssh.connect(hosts[int(id_worker)], port, username, password)
+	ssh.connect(hosts[int(id_worker)], port, username, password, look_for_keys=False)
 	print(f'sudo python3 proyecto/createVM.py {name_ovs} {vlan_id} {port_vnc} {path} {size_ram} {mac_addr}')
 	runCommandSSH(f'sudo python3 proyecto/createVM.py {name_ovs} {vlan_id} {port_vnc} {path} {size_ram} {mac_addr}',ssh)
 	ssh.close()
