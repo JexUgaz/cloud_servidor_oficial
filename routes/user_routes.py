@@ -129,17 +129,3 @@ def setNewSlice():
 		'ports':['6400','6401','6402','6403'],
 		'hosts':['10.0.0.30','10.0.0.50','10.0.0.30','10.0.0.50']
 	})
-
-@user_routes.route('/setNewUser',methods=['POST'])
-def setNewUser():
-	name=request.form.get('name') #Nombre del usuario a crear [STRING]
-	pswrd=request.form.get('pswrd') #Contraseña del usuario a crear [STRING]
-	rol=request.form.get('rol') #id del Rol del usuario (Administrador, Usuario) [INT]
-	email=request.form.get('email') #Email para los correos [STRING]
-	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user create --domain default --password {pswrd} {name}'")
-	idCreated=getIDUserByName(name)
-	result=UserBDService.setNewUser(name,pswrd,email,rol,idCreated)
-	if result:
-		return jsonify({'result':MensajeResultados.success,'msg':'Usuario creado exitosamente!','id':idCreated})
-	else:
-		return jsonify({'result':MensajeResultados.failed,'msg':'Ocurrió un error!'})

@@ -89,6 +89,31 @@ class UserBDService():
                 connection.close()
 
     @staticmethod
+    def existeContrasena(password):
+        connection = MySQLConnect.getConnection()
+        cursor = connection.cursor()
+
+        try:
+            query = "select * from usuario where password=SHA2(%s, 256);"
+            values = (password,)
+            cursor.execute(query, values)
+            rows = cursor.fetchall()
+            if(len(rows)==0):
+                #No existe la contraseña
+                return False
+            else:
+                #Existe la contraseña
+                return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return True
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+
+    @staticmethod
     def deleteUserByID(id):
         connection=MySQLConnect.getConnection()
         cursor = connection.cursor()
