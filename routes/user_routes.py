@@ -146,8 +146,9 @@ def setNewSlice():
         subred=data.get('subred',None)
     )
 	new_id_vlan=generateNewIDVLan()
+	name_dhcp=f"ns-dhcp-{new_id_vlan}"
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
-	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
+	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= name_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
 	if result:
 		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		ports=[]
