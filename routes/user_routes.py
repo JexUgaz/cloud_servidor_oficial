@@ -153,7 +153,7 @@ def setNewSlice():
 		#print(f"Ubicaciones: {ubicaciones}")
 		#print(f"Tamaño: {size_ram}")
 		
-		init_DHCP(vlan_id=slice_entity.id_vlan,dir_net=subred)
+		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		
 		#2 VMs hasta 5 VMs
 		#for i in range(len(ubicaciones)):
