@@ -1,5 +1,8 @@
+from entities.ImagenEntity import ImagenEntity
+
+
 class VirtualMachineEntity:
-    def __init__(self, id, nombre, sizeRam, fechaCreacion, dirMac, portVNC, zonaID, imagen):
+    def __init__(self, id, nombre, sizeRam, fechaCreacion, dirMac, portVNC, zonaID, imagen:ImagenEntity):
         self.id = id
         self.nombre = nombre
         self.sizeRam = sizeRam
