@@ -8,7 +8,7 @@ class UserBDService():
         connection=MySQLConnect.getConnection()
         cursor=connection.cursor(dictionary=True,buffered=False)
         try:
-            query = "select * from usuario where nombre=%s and password=SHA2(%s,256)"
+            query = "select * from usuario where nombre=%s and password=SHA2(%s,256);"
             cursor.execute(query, (name, password))
             user = cursor.fetchone()
             return user
@@ -26,8 +26,53 @@ class UserBDService():
         connection=MySQLConnect.getConnection()
         cursor=connection.cursor(dictionary=True,buffered=False)
         try:
-            query = "select * from usuario where id=%s"
+            query = "select * from usuario where id=%s;"
             cursor.execute(query, (id,))
+            json = cursor.fetchone()
+            
+            if cursor.rowcount == 0:
+                return UsuarioEntity(id=None,nombre=None,email=None,roles_id=None)
+
+            user=UsuarioEntity.convertToUser(json=json)
+            return user
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+
+    @staticmethod
+    def getUserByEmail(email):
+        connection=MySQLConnect.getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
+        try:
+            query = "select * from usuario where email=%s;"
+            cursor.execute(query, (email,))
+            json = cursor.fetchone()
+            
+            if cursor.rowcount == 0:
+                return UsuarioEntity(id=None,nombre=None,email=None,roles_id=None)
+
+            user=UsuarioEntity.convertToUser(json=json)
+            return user
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    @staticmethod
+    def getUserByName(nombre):
+        connection=MySQLConnect.getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
+        try:
+            query = "select * from usuario where nombre=%s;"
+            cursor.execute(query, (nombre,))
             json = cursor.fetchone()
             
             if cursor.rowcount == 0:
