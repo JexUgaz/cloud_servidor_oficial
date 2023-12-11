@@ -166,7 +166,9 @@ def setNewSlice():
 			mac_addr=generar_mac()
 			init_VM(vlan_id=new_id_vlan,port_vnc=port_vnc,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
 			print(f"PUERTO: {port_vnc}")
-			subprocess.run(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc+5900} ubuntu@{hosts[0]} &",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
+			subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc+5900} ubuntu@{hosts[0]}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
 			ports.append(port_vnc+5900)
 			ips_host.append(hosts[0])
 
