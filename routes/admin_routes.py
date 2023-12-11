@@ -2,9 +2,24 @@ from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, generateNewPass, getIDOpenstackUserByName, runCommand, sendMail
 from scripts.uso_real_recursos import monitorear_uso_recursos
 from services.imageBDService import ImageBDService
+from services.subredesBDService import SubredesBDService
 from services.userBDService import UserBDService
 
 admin_routes = Blueprint('admin_routes', __name__)
+
+@admin_routes.route('/addNewSubredes',methods=['GET'])
+def addNewSubredes():
+	lastSubred=SubredesBDService.getLastDirSubred()
+	if lastSubred is None:
+		newIndice=0
+	else:
+		lastIndice=lastSubred.split(".")[2]
+		newIndice=int(lastIndice)+1
+	result=SubredesBDService.setNewSubredes(newIndice)
+	if(result):
+		return jsonify({'result':MensajeResultados.success,'msg':f'Se añadieron nuevas subredes, [192.168.{newIndice}.0 - 192.168.{newIndice}.248]!'})
+	else:
+		return jsonify({'result':MensajeResultados.failed,'msg':'Ocurrió un error en el servirdor!'})
 
 @admin_routes.route('/deleteUser',methods=['GET'])
 def deleteUser():
@@ -13,6 +28,13 @@ def deleteUser():
 	runCommand(f"sh -c '. ~/env-scripts/admin-openrc;openstack user delete --domain default {name}'")
 	UserBDService.deleteUserByID(idCreated)
 	return jsonify({'result':MensajeResultados.success,'msg':'Usuario eliminado exitosamente!'})
+
+
+@admin_routes.route('/listSubredes',methods=['GET'])
+def listSubredes():
+	result=SubredesBDService.getAllSubredes()
+	return jsonify({'result':MensajeResultados.success,'subredes':result})
+
 
 @admin_routes.route('/listUser',methods=['GET'])
 def listUser():

@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, runCommand
 from services.imageBDService import ImageBDService
+from services.subredesBDService import SubredesBDService
 from services.userBDService import UserBDService
 
 user_routes = Blueprint('user_routes', __name__)
@@ -115,6 +116,7 @@ def setNewSlice():
 	print(f"N° Vms: {n_Vms}")
 	print(f"Ubicaciones: {ubicaciones}")
 	print(f"Tamaño: {size_ram}")
+	
 
 	#runCommand(f'python3 slice_DHCP.py br-int {idVlan} 192.168.10.0/24 192.168.10.5 192.168.10.10')
 
