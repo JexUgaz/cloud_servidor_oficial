@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, generateNewPass, getIDOpenstackUserByName, runCommand, sendMail
 from scripts.uso_real_recursos import monitorear_uso_recursos
+from services.imageBDService import ImageBDService
 from services.userBDService import UserBDService
 
 admin_routes = Blueprint('admin_routes', __name__)
@@ -17,6 +18,14 @@ def deleteUser():
 def listUser():
 	usuarios=UserBDService.getUsuarios()
 	return jsonify({'result':MensajeResultados.success,'usuarios':usuarios})
+
+@admin_routes.route('/listImages',methods=['GET'])
+def listImages():
+	images=ImageBDService.getAllImages()
+	if images is None:
+		return jsonify({'result':MensajeResultados.failed,'msg':'Error en el servidor!'})
+	else:
+		return jsonify({'result':MensajeResultados.success,'images':images})
 
 @admin_routes.route('/getMonitoreoRecursos',methods=['GET'])
 def getMonitoreoRecursos():

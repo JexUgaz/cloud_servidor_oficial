@@ -64,6 +64,34 @@ class ImageBDService:
                 connection.close()
     
     @staticmethod
+    def getAllImages():
+        connection = MySQLConnect.getConnection()
+        cursor = connection.cursor(dictionary=True, buffered=False)
+        
+        try:
+            query = """select i.id,i.path,i.nombre,u.nombre as 'usuario_id' from imagenes i
+	                    left join usuario u on (u.id=i.usuario_id);"""
+            cursor.execute(query)
+
+            result = []
+            for row in cursor.fetchall():
+                imagen = ImagenEntity.convertToImagen(json=row)
+                result.append(imagen.to_dict())
+            
+            if cursor.rowcount == 0:
+                return []
+
+            return result
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    
+    @staticmethod
     def getImagesByUser(idUser):
         connection = MySQLConnect.getConnection()
         cursor = connection.cursor(dictionary=True, buffered=False)
