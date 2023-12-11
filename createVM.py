@@ -29,5 +29,6 @@ def init_VM(vlan_id,size_ram,id_worker,path,mac_addr,name_ovs='br-vlan'):
 	ssh.connect(hosts[int(id_worker)], port, username, password, look_for_keys=False)
 	output=runCommandSSH(f'sudo python3 proyecto/createVM.py {name_ovs} {vlan_id} {path} {size_ram} {mac_addr}',ssh)
 	ssh.close()
+	return output
       
 	 

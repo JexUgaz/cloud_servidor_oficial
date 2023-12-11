@@ -158,8 +158,10 @@ def setNewSlice():
 			ubicacion=0#random.randint(0, 2)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
-			init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
+			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
 
+			print(output)
+			
 			#subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc+5900} ubuntu@{hosts[ubicacion]}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 			ports.append(port_vnc+5900)
