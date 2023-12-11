@@ -155,7 +155,7 @@ def setNewSlice():
 		#2 VMs hasta 5 VMs
 		starting_port=5901
 		for vm in slice_entity.vms:
-			ubicacion=0#random.randint(0, 2)
+			ubicacion=random.randint(0, 2)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
 			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
