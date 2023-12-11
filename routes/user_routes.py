@@ -147,20 +147,20 @@ def setNewSlice():
     )
 	new_id_vlan=generateNewIDVLan()
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
-	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
-	if result:
-		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
+	#result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
+	if True:
+		#init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		ports=[]
 		ips_host=[]
 		#2 VMs hasta 5 VMs
 		starting_port=5901
 		for vm in slice_entity.vms:
-			ubicacion=random.randint(0, 2)
+			ubicacion=0#random.randint(0, 2)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
-			init_VM(vlan_id=new_id_vlan,port_vnc=port_vnc,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
+			init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
 
-			subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc+5900} ubuntu@{hosts[ubicacion]}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+			#subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc+5900} ubuntu@{hosts[ubicacion]}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 			ports.append(port_vnc+5900)
 			ips_host.append(hosts[ubicacion])
