@@ -10,9 +10,9 @@ class TopologiaBDService:
             query = "SELECT * FROM topologias;"
             cursor.execute(query)
             topologia_data = cursor.fetchall()
-
+            print(topologia_data)
             topologias = [
-                TopologiaEntity(id=topologia[0], nombre=topologia[1])
+                TopologiaEntity(id=topologia['id'], nombre=topologia['nombre'])
                 for topologia in topologia_data
             ]
             topologias_serializable = [topologia.to_dict() for topologia in topologias]
