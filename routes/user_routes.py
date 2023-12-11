@@ -143,8 +143,8 @@ def setNewSlice():
     )
 	new_id_vlan=generateNewIDVLan()
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
-	#result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
-	if True:
+	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
+	if result:
 		ubicaciones= [0,0]#request.form.getlist('ubicaciones') # 0,2, 0, 2 : WORKER1, WORKER3, WORKER1, WORKER3
 		#size_ram=request.form.getlist('size_ram') # 100,100,100,100 : 100Mbytes memoria RAM
 
@@ -153,7 +153,7 @@ def setNewSlice():
 		#print(f"N° Vms: {n_Vms}")
 		#print(f"Ubicaciones: {ubicaciones}")
 		#print(f"Tamaño: {size_ram}")
-		#init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
+		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		
 		#2 VMs hasta 5 VMs
 		for vm in slice_entity.vms:
