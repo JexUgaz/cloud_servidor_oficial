@@ -1,0 +1,239 @@
+nohup: ignoring input
+ * Serving Flask app 'server'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://10.0.10.2:1800
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.21 - - [10/Dec/2023 22:43:51] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 22:47:32] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 22:50:40] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 22:52:51] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 23:11:20] "POST /user/authenticationUser HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/config/globals.py', reloading
+Nombre y pass: jex 1234
+Nombre y pass: niurka niurka
+Nombre y pass: niurka niurka
+Nombre y pass: niurka niurka
+Nombre y pass: niurka niurka
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.21 - - [10/Dec/2023 23:13:36] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:13:46] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 23:14:19] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:14:23] "POST /admin/setNewUser HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 1478, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 1458, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/ubuntu/proyecto/routes/admin_routes.py", line 37, in setNewUser
+    sendMail(receptor=email,subject="ACCESO HABILITADO - CLOUD HELP",msg='<!DOCTYPE html><html lang="es"><head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Bienvenido a CLOUD HELP</title> <style> body { font-family: \'Arial\', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } .container { background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center; } h1 { color: #333; } p { color: #666; } .credentials { background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 15px; } </style></head><body><div class="container"> <h1>Bienvenido a CLOUD HELP</h1> <p>Te damos la bienvenida a nuestra plataforma de ayuda en la nube. A continuación, encontrarás tus credenciales de acceso:</p> <div class="credentials"> <p><strong>Usuario:</strong> '+name+'</p> <p><strong>Contraseña:</strong>'+pswrd+'</p> </div> <p>¡Gracias por elegir CLOUD HELP! Estamos emocionados de tenerte como parte de nuestra comunidad.</p></div></body></html>')
+  File "/home/ubuntu/proyecto/config/helpers.py", line 38, in sendMail
+    conn.sendmail(from_addr=EmailParams.emisor,to_addrs=receptor,msg=msg.as_string())
+AttributeError: 'str' object has no attribute 'as_string'
+10.9.0.21 - - [10/Dec/2023 23:14:38] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:14:40] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:16:03] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:16:35] "POST /admin/setNewUser HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 1478, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 1458, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/ubuntu/proyecto/routes/admin_routes.py", line 37, in setNewUser
+    sendMail(receptor=email,subject="ACCESO HABILITADO - CLOUD HELP",msg='<!DOCTYPE html><html lang="es"><head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Bienvenido a CLOUD HELP</title> <style> body { font-family: \'Arial\', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } .container { background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center; } h1 { color: #333; } p { color: #666; } .credentials { background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 15px; } </style></head><body><div class="container"> <h1>Bienvenido a CLOUD HELP</h1> <p>Te damos la bienvenida a nuestra plataforma de ayuda en la nube. A continuación, encontrarás tus credenciales de acceso:</p> <div class="credentials"> <p><strong>Usuario:</strong> '+name+'</p> <p><strong>Contraseña:</strong>'+pswrd+'</p> </div> <p>¡Gracias por elegir CLOUD HELP! Estamos emocionados de tenerte como parte de nuestra comunidad.</p></div></body></html>')
+  File "/home/ubuntu/proyecto/config/helpers.py", line 38, in sendMail
+    conn.sendmail(from_addr=EmailParams.emisor,to_addrs=receptor,msg=msg.as_string())
+AttributeError: 'str' object has no attribute 'as_string'
+10.9.0.39 - - [10/Dec/2023 23:20:11] "POST /user/authenticationUser HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/config/helpers.py', reloading
+Nombre y pass: jex 1234
+Nombre y pass: niurka niurka
+Nombre y pass: jex 1234
+Nombre y pass: niurka niurka
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.39 - - [10/Dec/2023 23:27:18] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:27:31] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:27:36] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:28:48] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:30:10] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:30:15] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:30:17] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:30:55] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:30:56] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:31:33] "POST /admin/setNewUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:32:03] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 23:35:24] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.39 - - [10/Dec/2023 23:37:10] "POST /user/authenticationUser HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/config/helpers.py', reloading
+Nombre y pass: niurka niurka
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Email enviado correctamente al destinatario!!
+Nombre y pass: niurka niurka
+Nombre y pass: niurka niurka
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.21 - - [10/Dec/2023 23:39:48] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:40:15] "POST /admin/setNewUser HTTP/1.1" 200 -
+10.9.0.21 - - [10/Dec/2023 23:40:21] "GET /admin/listUser HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/routes/admin_routes.py', reloading
+Email enviado correctamente al destinatario!!
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.21 - - [11/Dec/2023 00:00:38] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:00:45] "POST /admin/setNewUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:00:58] "POST /admin/setNewUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:01:06] "POST /admin/setNewUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:01:49] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:02:16] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:03:51] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:03:54] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:04:13] "POST /admin/setNewUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:04:15] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:04:45] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:04:52] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:05:04] "POST /user/authenticationUser HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/routes/admin_routes.py', reloading
+jexv2 2 asdfasdf
+jexv2 2 asdfads
+jexv3 2 loammi.jezreel@gmail.com
+Nombre y pass: jex 1234
+jexv2 2 loammi.jezreel@gmail.com
+Email enviado correctamente al destinatario!!
+Nombre y pass: jexv2 tzMSJTdObKsWdw==
+Nombre y pass: jex 1234
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.21 - - [11/Dec/2023 00:27:24] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:27:26] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:27:30] "GET /admin/listImages HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:27:35] "GET /admin/listImages HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:28:19] "GET /admin/listImages HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:28:22] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:29:15] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:29:44] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:30:31] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:30:55] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:31:43] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:32:02] "GET /user/getImagesByUser?idUser=36bade7e328f439e97d88406c3960f8c HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:32:11] "POST /user/setNewImage HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:32:23] "GET /user/getImagesByUser?idUser=36bade7e328f439e97d88406c3960f8c HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:36:14] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:36:48] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:37:13] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:38:10] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:38:14] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:38:16] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:38:20] "GET /admin/listImages HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:38:58] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:39:00] "GET /admin/listImages HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:39:25] "GET /admin/getMonitoreoRecursos HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:43:28] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:43:34] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:43:39] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:43:47] "GET /admin/listUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:43:51] "GET /admin/listImages HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:54:32] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 00:55:46] "POST /user/authenticationUser HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/routes/user_routes.py', reloading
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+0.966553825321598
+0.9762454187593321
+0.975469370974373
+
+Tabla del uso de memoria de cada worker:
++-----------+--------------------+--------------------+--------------------+
+|   Worker  | Memoria Total (KB) | Memoria Usada (KB) | Memoria Libre (KB) |
++-----------+--------------------+--------------------+--------------------+
+| 10.0.0.30 |      5039292       |       510016       |      3567348       |
+| 10.0.0.40 |      5039284       |       517524       |      3553460       |
+| 10.0.0.50 |      5039280       |       517604       |      3567076       |
++-----------+--------------------+--------------------+--------------------+
+
+Tabla  del uso del sistema de cada worker:
++-----------+--------------------------+-----------------------------+--------------+------------------+
+|   Worker  | Porcentaje Sistema Usado | Porcentaje Sistema No Usado | Cores Usados | Tiempo de Espera |
++-----------+--------------------------+-----------------------------+--------------+------------------+
+| 10.0.0.30 |           3.34           |            96.66            |     0.17     |      7.385       |
+| 10.0.0.40 |           2.38           |            97.62            |     0.12     |      7.367       |
+| 10.0.0.50 |           2.45           |            97.55            |     0.12     |      7.297       |
++-----------+--------------------------+-----------------------------+--------------+------------------+
+Nombre y pass: jex 1234
+Nombre y pass: JEX 1234
+Nombre y pass: jex 1234
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 103-695-260
+10.9.0.21 - - [11/Dec/2023 02:25:52] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:25:55] "GET /admin/listSubredes HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:26:41] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:26:43] "GET /admin/listSubredes HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:28:01] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:28:31] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:28:33] "GET /admin/listSubredes HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:28:37] "GET /admin/addNewSubredes HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:28:39] "GET /admin/listSubredes HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:29:06] "POST /user/authenticationUser HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:29:10] "GET /admin/addNewSubredes HTTP/1.1" 200 -
+10.9.0.21 - - [11/Dec/2023 02:29:19] "GET /admin/listSubredes HTTP/1.1" 200 -
+ * Detected change in '/home/ubuntu/proyecto/routes/user_routes.py', reloading
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+Nombre y pass: jex 1234
+ * Restarting with stat
+Traceback (most recent call last):
+  File "/home/ubuntu/proyecto/server.py", line 8, in <module>
+    app.register_blueprint(user_routes, url_prefix='/user')
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/scaffold.py", line 44, in wrapper_func
+    return f(self, *args, **kwargs)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/app.py", line 597, in register_blueprint
+    blueprint.register(self, options)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/blueprints.py", line 335, in register
+    deferred(state)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/blueprints.py", line 431, in <lambda>
+    lambda s: s.add_url_rule(
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/blueprints.py", line 110, in add_url_rule
+    self.app.add_url_rule(
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/scaffold.py", line 44, in wrapper_func
+    return f(self, *args, **kwargs)
+  File "/home/ubuntu/proyecto/venv/lib/python3.8/site-packages/flask/sansio/app.py", line 659, in add_url_rule
+    raise AssertionError(
+AssertionError: View function mapping is overwriting an existing endpoint function: user_routes.getImagesByUser
