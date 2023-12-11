@@ -25,12 +25,14 @@ def generateNewPass():
 		if(not UserBDService.existeContrasena(contrasena)):
 			return contrasena
 def generateNewIDVLan():
-	while True:
-		length=5
-		new_id=runCommand(f"openssl rand -base64 {length}")
-		slice=SliceBDService.getSliceByID(new_id)
-		if(slice is None or slice.id_vlan is None):
-			return new_id
+    while True:
+        length=7
+        digitos = [str(random.randint(0, 9)) for _ in range(length)]
+        # Concatena los dígitos para formar el número completo
+        new_id = ''.join(digitos)
+        slice=SliceBDService.getSliceByID(new_id)
+        if(slice is None or slice.id_vlan is None):
+        	return new_id
 
 def sendMail(msg, receptor, subject):
     conn = smtplib.SMTP(host='smtp.gmail.com', port=587)
