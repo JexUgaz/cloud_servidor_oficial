@@ -4,6 +4,7 @@ import smtplib
 import socket
 import subprocess
 from config.globals import EmailParams
+from services.sliceBDService import SliceBDService
 from services.userBDService import UserBDService
 
 class MensajeResultados:
@@ -23,6 +24,13 @@ def generateNewPass():
 		contrasena=runCommand(f"openssl rand -base64 {length}")
 		if(not UserBDService.existeContrasena(contrasena)):
 			return contrasena
+def generateNewIDVLan():
+	while True:
+		length=5
+		new_id=runCommand(f"openssl rand -base64 {length}")
+		slice=SliceBDService.getSliceByID(new_id)
+		if(slice is None or slice.id_vlan is None):
+			return new_id
 
 def sendMail(msg, receptor, subject):
     conn = smtplib.SMTP(host='smtp.gmail.com', port=587)

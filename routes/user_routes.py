@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from config.globals import InfraestructuraGlobal
-from config.helpers import MensajeResultados, runCommand
+from config.helpers import MensajeResultados, generateNewIDVLan, runCommand
 from entities.SliceEntity import SliceEntity
 from entities.TopologiaEntity import TopologiaEntity
 from entities.VirtualMachineEntity import VirtualMachineEntity
@@ -140,9 +140,10 @@ def setNewSlice():
         usuario_id=data.get('usuario_id'),
         subred=data.get('subred',None)
     )
+	new_id_vlan=generateNewIDVLan()
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
-	slice_entity.id_vlan= SliceBDService.setNewSlice(cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
-	if not slice_entity.id_vlan is None:
+	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
+	if result:
 		ubicaciones= [0,0]#request.form.getlist('ubicaciones') # 0,2, 0, 2 : WORKER1, WORKER3, WORKER1, WORKER3
 		#size_ram=request.form.getlist('size_ram') # 100,100,100,100 : 100Mbytes memoria RAM
 
