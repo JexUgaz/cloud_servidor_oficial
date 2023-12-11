@@ -1,8 +1,6 @@
 from email.mime.text import MIMEText
 import smtplib
 import subprocess
-import secrets
-import string
 from config.globals import EmailParams
 from services.userBDService import UserBDService
 
@@ -20,8 +18,7 @@ def getIDUserByName(name):
 def generateNewPass():
 	while True:
 		length=10
-		caracteres = string.ascii_letters + string.digits + string.punctuation
-		contrasena = ''.join(secrets.choice(caracteres) for _ in range(length))
+		contrasena=runCommand(f"openssl rand -base64 {length}")
 		if(not UserBDService.existeContrasena(contrasena)):
 			return contrasena
 
