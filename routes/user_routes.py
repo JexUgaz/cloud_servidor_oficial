@@ -158,7 +158,7 @@ def setNewSlice():
 			ubicacion=random.randint(0, 2)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
-			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
+			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
 			stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
 			port_vnc_worker = int(stdout_value)
 
