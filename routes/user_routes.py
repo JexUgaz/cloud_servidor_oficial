@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, runCommand
 from services.imageBDService import ImageBDService
-from services.subredesBDService import SubredesBDService
 from services.topologiaBDService import TopologiaBDService
 from services.userBDService import UserBDService
 from slice_DHCP import init_DHCP
@@ -102,7 +101,7 @@ def getImagesByUser():
 		})
 
 @user_routes.route('/getAllTopologias',methods=['GET'])
-def getImagesByUser():
+def getAllTopologias():
 	topologias=TopologiaBDService.getAllTopologias()
 
 	if(topologias is None):
