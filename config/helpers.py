@@ -26,10 +26,8 @@ def generateNewPass():
 			return contrasena
 def generateNewIDVLan():
     while True:
-        length=7
-        digitos = [str(random.randint(0, 9)) for _ in range(length)]
         # Concatena los dígitos para formar el número completo
-        new_id = ''.join(digitos)
+        new_id = str(random.randint(0, 4095))
         slice=SliceBDService.getSliceByID(new_id)
         if(slice is None or slice.id_vlan is None):
         	return new_id
