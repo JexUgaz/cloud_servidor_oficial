@@ -13,6 +13,8 @@ from services.userBDService import UserBDService
 from slice_DHCP import init_DHCP
 
 user_routes = Blueprint('user_routes', __name__)
+#Datos de conexión SSH
+hosts = ['10.0.0.30','10.0.0.40','10.0.0.50']
 
 @user_routes.route('/authenticationUser',methods=['POST'])
 def authenticationUser():
@@ -155,18 +157,24 @@ def setNewSlice():
 		#print(f"Tamaño: {size_ram}")
 		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		
+		ports=[]
+		ips_host=[]
 		#2 VMs hasta 5 VMs
 		for vm in slice_entity.vms:
 			port_vnc=find_available_portVNC()			
 			mac_addr=generar_mac()
 			init_VM(vlan_id=new_id_vlan,port_vnc=port_vnc,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)
 			
+			runCommand(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc+5900} ubuntu@{hosts[0]}")
+			ports.append(port_vnc+5900)
+			ips_host.append(hosts[0])
+
 		return jsonify({
 			'result':MensajeResultados.success,
 			'msg':'Creado exitosamente!',
-			'idSlice':'50',
-			'ports':['6400','6401','6402','6403'],
-			'hosts':['10.0.0.30','10.0.0.50','10.0.0.30','10.0.0.50']
+			'idSlice':new_id_vlan,
+			'ports':ports,
+			'hosts':ips_host
 		})
 	else:
 		return jsonify({
