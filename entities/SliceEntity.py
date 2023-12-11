@@ -1,7 +1,8 @@
-from entities.VirtualMachineEntity import VirtualMachine
+from entities.TopologiaEntity import TopologiaEntity
+from entities.VirtualMachineEntity import VirtualMachineEntity
 
-class Slice:
-    def __init__(self, nombre,id_vlan, vms:list[VirtualMachine], nombre_dhcp, topologia, infraestructura, fecha_creacion, usuario_id, subred):
+class SliceEntity:
+    def __init__(self, nombre,id_vlan, vms:list[VirtualMachineEntity], nombre_dhcp, topologia:TopologiaEntity, infraestructura, fecha_creacion, usuario_id, subred):
         self.id_vlan = id_vlan
         self.nombre=nombre
         self.vms = vms

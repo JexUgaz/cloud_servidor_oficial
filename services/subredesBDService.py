@@ -42,6 +42,28 @@ class SubredesBDService:
                 connection.close()
     
     @staticmethod
+    def getRandomSubredDesactivado():
+        connection=MySQLConnect.getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
+        try:
+            query = "SELECT dir_red,id FROM bd_cloud.subredes WHERE activo = 0 ORDER BY RAND() LIMIT 1;"
+            cursor.execute(query)
+            json = cursor.fetchone()
+            
+            if cursor.rowcount == 0:
+                return None
+
+            return json["id"],json["dir_red"]
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    
+    @staticmethod
     def getAllSubredes():
         connection=MySQLConnect.getConnection()
         cursor=connection.cursor(dictionary=True,buffered=False)

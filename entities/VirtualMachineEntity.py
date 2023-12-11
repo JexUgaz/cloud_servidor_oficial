@@ -1,4 +1,4 @@
-class VirtualMachine:
+class VirtualMachineEntity:
     def __init__(self, id, nombre, sizeRam, fechaCreacion, dirMac, portVNC, zonaID, imagen):
         self.id = id
         self.nombre = nombre

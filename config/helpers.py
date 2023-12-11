@@ -1,4 +1,5 @@
 from email.mime.text import MIMEText
+import random
 import smtplib
 import socket
 import subprocess
@@ -48,3 +49,9 @@ def find_available_portVNC(starting_port=5901):
                 return starting_port-5900
         except socket.error:
             starting_port += 1
+
+def generar_mac():
+	parte_fija = "fa:16:3e"
+	resto = ':'.join(['{:02x}'.format(random.randint(0, 255)) for _ in range(3)])
+	direccion_mac = parte_fija + ':' + resto
+	return direccion_mac

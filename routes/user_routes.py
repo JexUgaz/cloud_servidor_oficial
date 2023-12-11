@@ -1,6 +1,12 @@
 from flask import Blueprint, jsonify, request
+from config.globals import InfraestructuraGlobal
 from config.helpers import MensajeResultados, runCommand
+from entities.SliceEntity import SliceEntity
+from entities.TopologiaEntity import TopologiaEntity
+from entities.VirtualMachineEntity import VirtualMachineEntity
 from services.imageBDService import ImageBDService
+from services.sliceBDService import SliceBDService
+from services.subredesBDService import SubredesBDService
 from services.topologiaBDService import TopologiaBDService
 from services.userBDService import UserBDService
 from slice_DHCP import init_DHCP
@@ -120,29 +126,47 @@ def getAllTopologias():
 @user_routes.route('/setNewSlice',methods=['POST'])
 def setNewSlice():
 	#DEBEMOS HACER QUE LA RED TENGA MASCAA /29, máximo de 5 VMs
-	idVlan='50' #La VLAN lo sacara el propio servidor de la BD, id del Slice
 	
-	idTopologia= request.form.get('idTopologia') # ID de la Topología
-	n_Vms= request.form.get('n_Vms') # 4 : Número de VMs
-	ubicaciones= request.form.getlist('ubicaciones') # 0,2, 0, 2 : WORKER1, WORKER3, WORKER1, WORKER3
-	size_ram=request.form.getlist('size_ram') # 100,100,100,100 : 100Mbytes memoria RAM
+	data = request.json
 
-	print(f"Topología: {idTopologia}")
-	#print(f"User: {idUser}")
-	print(f"N° Vms: {n_Vms}")
-	print(f"Ubicaciones: {ubicaciones}")
-	print(f"Tamaño: {size_ram}")
-	
-	#init_DHCP(vlan_id=,dir_net=)
-	
-	#2 VMs hasta 5 VMs
-	#for i in range(len(ubicaciones)):
-	#	runCommand(f'python3 createVM.py slice{idVlan}-vm{i} {idVlan} 50{i} {size_ram[i]} {ubicaciones[i]}')
+	slice_entity = SliceEntity(
+        id_vlan=data.get('id_vlan',None),
+        nombre=data.get('nombre'),
+        vms=[VirtualMachineEntity(**vm) for vm in data.get('vms', [])],
+        nombre_dhcp=data.get('nombre_dhcp',None),
+        topologia=TopologiaEntity(**data.get('topologia', [])[0]),
+        infraestructura=data.get('infraestructura',None),
+        fecha_creacion=data.get('fecha_creacion',None),
+        usuario_id=data.get('usuario_id'),
+        subred=data.get('subred',None)
+    )
+	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
+	slice_entity.id_vlan= SliceBDService.setNewSlice(cnt_nodos= len(slice_entity.vms),nombre_dhcp= slice_entity.nombre_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
+	if not slice_entity.id_vlan is None:
+		ubicaciones= [0,0]#request.form.getlist('ubicaciones') # 0,2, 0, 2 : WORKER1, WORKER3, WORKER1, WORKER3
+		#size_ram=request.form.getlist('size_ram') # 100,100,100,100 : 100Mbytes memoria RAM
 
-	return jsonify({
-		'result':MensajeResultados.success,
-		'msg':'Creado exitosamente!',
-		'idSlice':'50',
-		'ports':['6400','6401','6402','6403'],
-		'hosts':['10.0.0.30','10.0.0.50','10.0.0.30','10.0.0.50']
-	})
+		#print(f"Topología: {idTopologia}")
+		#print(f"User: {idUser}")
+		#print(f"N° Vms: {n_Vms}")
+		#print(f"Ubicaciones: {ubicaciones}")
+		#print(f"Tamaño: {size_ram}")
+		
+		init_DHCP(vlan_id=slice_entity.id_vlan,dir_net=subred)
+		
+		#2 VMs hasta 5 VMs
+		#for i in range(len(ubicaciones)):
+		#	runCommand(f'python3 createVM.py slice{idVlan}-vm{i} {idVlan} 50{i} {size_ram[i]} {ubicaciones[i]} {dir_mac}')
+
+		return jsonify({
+			'result':MensajeResultados.success,
+			'msg':'Creado exitosamente!',
+			'idSlice':'50',
+			'ports':['6400','6401','6402','6403'],
+			'hosts':['10.0.0.30','10.0.0.50','10.0.0.30','10.0.0.50']
+		})
+	else:
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Hubo un error!'
+		})
