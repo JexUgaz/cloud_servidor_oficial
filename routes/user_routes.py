@@ -159,7 +159,7 @@ def setNewSlice():
 		for vm in slice_entity.vms:
 			port_vnc=find_available_portVNC()			
 			mac_addr=generar_mac()
-			init_VM(vlan_id=new_id_vlan,port_vnc=port_vnc,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0].path,mac_addr=mac_addr)
+			init_VM(vlan_id=new_id_vlan,port_vnc=port_vnc,size_ram=vm.sizeRam,id_worker=0,path=vm.imagen[0]['path'],mac_addr=mac_addr)
 			
 		return jsonify({
 			'result':MensajeResultados.success,
