@@ -153,7 +153,7 @@ def setNewSlice():
 	
 	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= name_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
 	if result:
-		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
+		#init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		ports=[]
 		ips_host=[]
 		#2 VMs hasta 5 VMs
@@ -171,7 +171,7 @@ def setNewSlice():
 			ports.append(port_vnc+5900)
 			ips_host.append(zonas[ubicacion].dir_ip)
 			starting_port=port_vnc+5900+1
-			VirtualMachineBDService.setNewVM(nombre=vm.nombre,vlan_id=new_id_vlan,size_ram=vm.sizeRam,dir_mac=mac_addr,port_vnc=port_vnc+5900,zona_id=zonas[ubicacion].id,image_id=vm.imagen.id)
+			VirtualMachineBDService.setNewVM(nombre=vm.nombre,vlan_id=new_id_vlan,size_ram=vm.sizeRam,dir_mac=mac_addr,port_vnc=port_vnc+5900,zona_id=zonas[ubicacion].id,image_id=vm.imagen[0]['id'])
 
 		return jsonify({
 			'result':MensajeResultados.success,
