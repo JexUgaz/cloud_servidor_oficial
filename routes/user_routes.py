@@ -134,10 +134,10 @@ def getAllTopologias():
 def setNewSlice():
 	id_vlan = request.form.get('id_vlan', None)
 	nombre = request.form.get('nombre')
-	vms_data = json.loads(request.form.get('vms'))  # Supongamos que 'vms' es un JSON en forma de cadena
+	vms_data = json.loads(request.form.get('vms'))  
 	vms = [VirtualMachineEntity(**vm) for vm in vms_data]
 	nombre_dhcp = request.form.get('nombre_dhcp', None)
-	topologia_data = json.loads(request.form.get('topologia'))[0]  # Supongamos que 'topologia' es un JSON en forma de cadena
+	topologia_data = json.loads(request.form.get('topologia'))
 	topologia = TopologiaEntity(**topologia_data)
 	infraestructura = request.form.get('infraestructura', None)
 	fecha_creacion = request.form.get('fecha_creacion', None)
@@ -160,7 +160,11 @@ def setNewSlice():
 	name_dhcp=f"ns-dhcp-{new_id_vlan}"
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
 	zonas=ZonaBDService.getAllZonas()
-	
+	####### PROBANDO  #########
+	for vm in slice_entity.vms:
+		vm.imagen['id']
+		vm.imagen['path']
+
 	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= name_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
 	if result:
 		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
@@ -172,7 +176,7 @@ def setNewSlice():
 			ubicacion=random.randint(0, len(zonas)-1)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
-			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
+			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen['path'],mac_addr=mac_addr)			
 			stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
 			port_vnc_worker = int(stdout_value)
 
@@ -181,7 +185,7 @@ def setNewSlice():
 			ports.append(port_vnc+5900)
 			ips_host.append(zonas[ubicacion].dir_ip)
 			starting_port=port_vnc+5900+1
-			VirtualMachineBDService.setNewVM(nombre=vm.nombre,vlan_id=new_id_vlan,size_ram=vm.sizeRam,dir_mac=mac_addr,port_vnc=port_vnc+5900,zona_id=zonas[ubicacion].id,image_id=vm.imagen[0]['id'])
+			VirtualMachineBDService.setNewVM(nombre=vm.nombre,vlan_id=new_id_vlan,size_ram=vm.sizeRam,dir_mac=mac_addr,port_vnc=port_vnc+5900,zona_id=zonas[ubicacion].id,image_id=vm.imagen['id'])
 
 		SubredesBDService.setActiveOrDesactivSubred(id_Subred=id_subred,activo=1)
 
