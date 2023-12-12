@@ -113,6 +113,29 @@ def getImagesByUser():
 			'imagenes':imagenes
 		})
 
+
+@user_routes.route('/getSlicesByUser',methods=['GET'])
+def getSlicesByUser():
+	idUser=request.args.get("idUser")
+	slices=SliceBDService.getSlicesByUser(idUser)
+
+	if(slices is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Ups! Ocurrió un error'
+		})
+	elif (len(slices) == 0):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':f'El usuario: "{idUser}" no tiene slices!'
+		})
+	else:
+		return jsonify({
+			'result':MensajeResultados.success,
+			'msg':'Se encontró exitosamente las imágenes!',
+			'slices':slices
+		})
+
 @user_routes.route('/getAllTopologias',methods=['GET'])
 def getAllTopologias():
 	topologias=TopologiaBDService.getAllTopologias()
