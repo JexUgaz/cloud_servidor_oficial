@@ -26,7 +26,7 @@ class SliceEntity:
             infraestructura=data.get('infraestructura'),
             fecha_creacion=data.get('fecha_creacion'),
             usuario_id=data.get('usuario_id'),
-            subred=data.get('subred')
+            subred=data.get('subredes_id')
         )
 
 

@@ -8,6 +8,7 @@ from createVM import init_VM
 from entities.SliceEntity import SliceEntity
 from entities.TopologiaEntity import TopologiaEntity
 from entities.VirtualMachineEntity import VirtualMachineEntity
+from scripts.limpiar_Slice import cleanWorker, kill_ssh_tunnel_processes, limpiarDHCP_Interfaces
 from services.imageBDService import ImageBDService
 from services.sliceBDService import SliceBDService
 from services.subredesBDService import SubredesBDService
@@ -151,6 +152,42 @@ def getAllTopologias():
 			'msg':'Se encontró exitosamente las topologías!',
 			'topologias':topologias
 		})
+
+
+@user_routes.route('/deleteSlice',methods=['GET'])
+def deleteSlice():
+	idSlice=request.args.get("idSlice")
+	slice=SliceBDService.getSliceByID(idSlice)
+	if(slice is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Ups! Ocurrió un error'
+		})
+	elif (slice.id_vlan is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'No existe el slice!'
+		})
+	else:
+		vms=VirtualMachineBDService.getVMBySlice(idSlice)
+		if vms is None:
+			return jsonify({
+				'result':MensajeResultados.failed,
+				'msg':'Ups! Ocurrió un error'
+			})
+		else:
+			for vm in vms:
+				cleanWorker(host=vm.zonaID,id_vlan=idSlice)
+				kill_ssh_tunnel_processes(vnc_port=vm.portVNC)
+			limpiarDHCP_Interfaces(id_vlan=idSlice)
+			VirtualMachineBDService.deleteVMByIdSlice(id_vlan=idSlice)
+			SliceBDService.deleteSlice(id_vlan=idSlice)
+			SubredesBDService.setActiveOrDesactivSubred(id_Subred=slice.subred,activo=0)
+			return jsonify({
+				'result':MensajeResultados.success,
+				'msg':'Se limpió exitosamente!',
+			})
+
 
 
 @user_routes.route('/setNewSlice',methods=['POST'])

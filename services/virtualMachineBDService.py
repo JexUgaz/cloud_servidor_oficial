@@ -1,3 +1,4 @@
+from entities.VirtualMachineEntity import VirtualMachineEntity
 from services.mysql_connect import MySQLConnect
 
 
@@ -23,6 +24,27 @@ class VirtualMachineBDService:
                 cursor.close()
             if connection.is_connected():
                 connection.close()
+
+    @staticmethod
+    def deleteVMByIdSlice(id_vlan):
+        connection=MySQLConnect.getConnection()
+        cursor = connection.cursor()
+        try:
+            query = "delete from vms where slices_id_vlan=%s;"
+            values = (id_vlan,)
+            cursor.execute(query, values)
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+
+
     @staticmethod
     def existeMac(dir_mac):
         connection=MySQLConnect.getConnection()
@@ -36,6 +58,33 @@ class VirtualMachineBDService:
                 return False
 
             return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    @staticmethod
+    def getVMBySlice(id_vlan):
+        connection=MySQLConnect.getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
+        try:
+            query = """
+                select v.id,v.nombre,v.size_ram,v.fecha_creacion,v.dir_mac,v.port_vnc,z.dir_ip 'zona' 
+                from vms v
+                    left join zona z on z.id=v.zona_id
+                where v.slices_id_vlan=%s;
+            """
+            cursor.execute(query, (id_vlan,))
+            vms_json = cursor.fetchall()
+            print(f"vms_json: {vms_json}")
+            vm = [
+                VirtualMachineEntity(id=vm['id'],nombre=vm['nombre'],sizeRam=vm['size_ram'],fechaCreacion=vm['fecha_creacion'],dirMac=vm['dir_mac'],portVNC=vm['port_vnc'],zonaID=vm['zona'],imagen=None)
+                for vm in vms_json
+            ]
+            return vm
         except Exception as e:
             print(f"Exception: {e}")
             return None

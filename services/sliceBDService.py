@@ -58,6 +58,27 @@ class SliceBDService:
                 cursor.close()
             if connection.is_connected():
                 connection.close()
+
+    
+    @staticmethod
+    def deleteSlice(id_vlan):
+        connection=MySQLConnect.getConnection()
+        cursor = connection.cursor()
+        try:
+            query = "delete from slices where id_vlan=%s;"
+            values = (id_vlan,)
+            cursor.execute(query, values)
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    
     @staticmethod
     def getAllSlices() -> List[SliceEntity]:
         connection = MySQLConnect.getConnection()
