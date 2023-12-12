@@ -162,16 +162,18 @@ def setNewSlice():
 			ubicacion=random.randint(0, len(zonas)-1)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
-			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
-			stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
-			port_vnc_worker = int(stdout_value)
+			#output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
+			#stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
+			#port_vnc_worker = int(stdout_value)
 
-			subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc_worker+5900} ubuntu@{zonas[ubicacion].dir_ip}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+			#subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc_worker+5900} ubuntu@{zonas[ubicacion].dir_ip}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 			ports.append(port_vnc+5900)
 			ips_host.append(zonas[ubicacion].dir_ip)
 			starting_port=port_vnc+5900+1
 			VirtualMachineBDService.setNewVM(nombre=vm.nombre,vlan_id=new_id_vlan,size_ram=vm.sizeRam,dir_mac=mac_addr,port_vnc=port_vnc+5900,zona_id=zonas[ubicacion].id,image_id=vm.imagen[0]['id'])
+
+		SubredesBDService.setActiveOrDesactivSubred(id_Subred=id_subred,activo=1)
 
 		return jsonify({
 			'result':MensajeResultados.success,

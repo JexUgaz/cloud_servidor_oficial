@@ -6,6 +6,7 @@ import subprocess
 from config.globals import EmailParams
 from services.sliceBDService import SliceBDService
 from services.userBDService import UserBDService
+from services.virtualMachineBDService import VirtualMachineBDService
 
 class MensajeResultados:
 	success="success"
@@ -59,7 +60,9 @@ def find_available_portVNC(starting_port=5901):
             starting_port += 1
 
 def generar_mac():
-	parte_fija = "fa:16:3e"
-	resto = ':'.join(['{:02x}'.format(random.randint(0, 255)) for _ in range(3)])
-	direccion_mac = parte_fija + ':' + resto
-	return direccion_mac
+    parte_fija = "fa:16:3e"
+    while True:
+        resto = ':'.join(['{:02x}'.format(random.randint(0, 255)) for _ in range(3)])
+        direccion_mac = parte_fija + ':' + resto
+        if(not VirtualMachineBDService.existeMac(dir_mac=direccion_mac)):    
+            return direccion_mac

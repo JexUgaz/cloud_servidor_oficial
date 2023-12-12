@@ -23,3 +23,24 @@ class VirtualMachineBDService:
                 cursor.close()
             if connection.is_connected():
                 connection.close()
+    @staticmethod
+    def existeMac(dir_mac):
+        connection=MySQLConnect.getConnection()
+        cursor=connection.cursor(dictionary=True,buffered=False)
+        try:
+            query = "SELECT * FROM vms WHERE dir_mac = %s;"
+            cursor.execute(query,(dir_mac,))
+            json = cursor.fetchone()
+            
+            if cursor.rowcount == 0:
+                return False
+
+            return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()

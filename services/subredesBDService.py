@@ -19,6 +19,25 @@ class SubredesBDService:
                 cursor.close()
             if connection.is_connected():
                 connection.close()
+    
+    @staticmethod
+    def setActiveOrDesactivSubred(id_Subred,activo):
+        connection=MySQLConnect.getConnection()
+        cursor = connection.cursor()
+        try:
+            query = "update subredes set activo=%s where id=%s;"
+            values = (activo,id_Subred)
+            cursor.execute(query, values)
+            connection.commit()
+            return True
+        except Exception as e:
+            print(f"Exception: {e}")
+            return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
     @staticmethod
     def getLastDirSubred():
         connection=MySQLConnect.getConnection()
