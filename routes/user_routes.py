@@ -210,7 +210,7 @@ def deleteSlice():
 			SubredesBDService.setActiveOrDesactivSubred(id_Subred=slice.subred,activo=0)
 			return jsonify({
 				'result':MensajeResultados.success,
-				'msg':'Se limpió exitosamente!',
+				'msg':'Se eliminó el slice exitosamente!',
 			})
 
 
