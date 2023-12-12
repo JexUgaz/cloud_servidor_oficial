@@ -1,3 +1,4 @@
+import json
 import random
 import subprocess
 from flask import Blueprint, jsonify, request
@@ -131,21 +132,30 @@ def getAllTopologias():
 
 @user_routes.route('/setNewSlice',methods=['POST'])
 def setNewSlice():
-	#DEBEMOS HACER QUE LA RED TENGA MASCAA /29, máximo de 5 VMs
-	
-	data = request.json
+	id_vlan = request.form.get('id_vlan', None)
+	nombre = request.form.get('nombre')
+	vms_data = json.loads(request.form.get('vms'))  # Supongamos que 'vms' es un JSON en forma de cadena
+	vms = [VirtualMachineEntity(**vm) for vm in vms_data]
+	nombre_dhcp = request.form.get('nombre_dhcp', None)
+	topologia_data = json.loads(request.form.get('topologia'))[0]  # Supongamos que 'topologia' es un JSON en forma de cadena
+	topologia = TopologiaEntity(**topologia_data)
+	infraestructura = request.form.get('infraestructura', None)
+	fecha_creacion = request.form.get('fecha_creacion', None)
+	usuario_id = request.form.get('usuario_id')
+	subred = request.form.get('subred', None)
 
 	slice_entity = SliceEntity(
-        id_vlan=data.get('id_vlan',None),
-        nombre=data.get('nombre'),
-        vms=[VirtualMachineEntity(**vm) for vm in data.get('vms', [])],
-        nombre_dhcp=data.get('nombre_dhcp',None),
-        topologia=TopologiaEntity(**data.get('topologia', [])[0]),
-        infraestructura=data.get('infraestructura',None),
-        fecha_creacion=data.get('fecha_creacion',None),
-        usuario_id=data.get('usuario_id'),
-        subred=data.get('subred',None)
-    )
+		id_vlan=id_vlan,
+		nombre=nombre,
+		vms=vms,
+		nombre_dhcp=nombre_dhcp,
+		topologia=topologia,
+		infraestructura=infraestructura,
+		fecha_creacion=fecha_creacion,
+		usuario_id=usuario_id,
+		subred=subred
+	)
+
 	new_id_vlan=generateNewIDVLan()
 	name_dhcp=f"ns-dhcp-{new_id_vlan}"
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
