@@ -12,11 +12,12 @@ from services.sliceBDService import SliceBDService
 from services.subredesBDService import SubredesBDService
 from services.topologiaBDService import TopologiaBDService
 from services.userBDService import UserBDService
+from services.virtualMachineBDService import VirtualMachineBDService
+from services.zonaBDService import ZonaBDService
 from slice_DHCP import init_DHCP
 
 user_routes = Blueprint('user_routes', __name__)
 #Datos de conexión SSH
-hosts = ['10.0.0.30','10.0.0.40','10.0.0.50']
 
 @user_routes.route('/authenticationUser',methods=['POST'])
 def authenticationUser():
@@ -148,6 +149,8 @@ def setNewSlice():
 	new_id_vlan=generateNewIDVLan()
 	name_dhcp=f"ns-dhcp-{new_id_vlan}"
 	id_subred,subred=SubredesBDService.getRandomSubredDesactivado() #Hay que activar la subred
+	zonas=ZonaBDService.getAllZonas()
+	
 	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= name_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
 	if result:
 		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
@@ -156,19 +159,19 @@ def setNewSlice():
 		#2 VMs hasta 5 VMs
 		starting_port=5901
 		for vm in slice_entity.vms:
-			ubicacion=random.randint(0, 2)
+			ubicacion=random.randint(0, len(zonas)-1)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
 			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
 			stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
 			port_vnc_worker = int(stdout_value)
 
-			subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc_worker+5900} ubuntu@{hosts[ubicacion]}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+			subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc_worker+5900} ubuntu@{zonas[ubicacion].dir_ip}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 			ports.append(port_vnc+5900)
-			ips_host.append(hosts[ubicacion])
+			ips_host.append(zonas[ubicacion].dir_ip)
 			starting_port=port_vnc+5900+1
-
+			VirtualMachineBDService.setNewVM(nombre=vm.nombre,vlan_id=new_id_vlan,size_ram=vm.sizeRam,dir_mac=mac_addr,port_vnc=port_vnc+5900,zona_id=zonas[ubicacion].id,image_id=vm.imagen.id)
 
 		return jsonify({
 			'result':MensajeResultados.success,

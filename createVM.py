@@ -9,7 +9,7 @@ username = 'ubuntu'
 password = 'ubuntu'
 
 def runCommandSSH(command, ssh):
-	print(f"Comando ssh: {command}")
+	#print(f"Comando ssh: {command}")
 	stdin, stdout, stderr = ssh.exec_command(command)
 	exit_code = stdout.channel.recv_exit_status()
 
@@ -27,7 +27,6 @@ def init_VM(vlan_id,size_ram,id_worker,path,mac_addr,name_ovs='br-vlan'):
 
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	
-	print(f"host: {hosts[int(id_worker)]}")
 	ssh.connect(hosts[int(id_worker)], port, username, password, look_for_keys=False)
 	output=runCommandSSH(f'sudo python3 proyecto/createVM.py {name_ovs} {vlan_id} {path} {size_ram} {mac_addr}',ssh)
 	ssh.close()
