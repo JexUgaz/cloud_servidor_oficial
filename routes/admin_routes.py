@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from config.helpers import MensajeResultados, generateNewPass, getIDOpenstackUserByName, runCommand, sendMail
 from scripts.uso_real_recursos import monitorear_uso_recursos
 from services.imageBDService import ImageBDService
+from services.sliceBDService import SliceBDService
 from services.subredesBDService import SubredesBDService
 from services.userBDService import UserBDService
 
@@ -48,6 +49,15 @@ def listImages():
 		return jsonify({'result':MensajeResultados.failed,'msg':'Error en el servidor!'})
 	else:
 		return jsonify({'result':MensajeResultados.success,'images':images})
+	
+
+@admin_routes.route('/listSlices',methods=['GET'])
+def listSlices():
+	slices=SliceBDService.getAllSlices()
+	if slices is None:
+		return jsonify({'result':MensajeResultados.failed,'msg':'Error en el servidor!'})
+	else:
+		return jsonify({'result':MensajeResultados.success,'slices':slices})
 
 @admin_routes.route('/getMonitoreoRecursos',methods=['GET'])
 def getMonitoreoRecursos():

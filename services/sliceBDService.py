@@ -1,3 +1,5 @@
+from typing import List
+from config.globals import HelperGlobal
 from entities.SliceEntity import SliceEntity
 from services.mysql_connect import MySQLConnect
 
@@ -51,6 +53,42 @@ class SliceBDService:
         except Exception as e:
             print(f"Exception: {e}")
             return False
+        finally:
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+    @staticmethod
+    def getAllSlices() -> List[SliceEntity]:
+        connection = MySQLConnect.getConnection()
+        cursor = connection.cursor()
+
+        try:
+            query = """
+                select s.id_vlan,s.nombre,s.fecha_creacion,u.nombre 'creador',t.nombre 'topologia',s.cantidad_nodos 'n_nodos',su.dir_red from slices s
+                    left join usuario u on u.id=s.usuario_id
+                    left join topologias t on t.id=s.topologias_id
+                    left join subredes su on su.id=s.subredes_id;
+            """
+            cursor.execute(query)
+            slice_data = cursor.fetchall()
+
+            slices = [
+                {
+                    'id_vlan': slice[0],
+                    'nombre': slice[1],
+                    'fecha_creacion':HelperGlobal.getStringFechaFormat(slice[2]),
+                    'creador':slice[3],
+                    'topologia': slice[4],
+                    'n_nodos': slice[5],
+                    'dir_red': slice[6]
+                }
+                for slice in slice_data
+            ]
+            return slices
+        except Exception as e:
+            print(f"Exception: {e}")
+            return None
         finally:
             if cursor:
                 cursor.close()

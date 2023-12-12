@@ -66,3 +66,4 @@ def generar_mac():
         direccion_mac = parte_fija + ':' + resto
         if(not VirtualMachineBDService.existeMac(dir_mac=direccion_mac)):    
             return direccion_mac
+        
