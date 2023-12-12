@@ -16,7 +16,7 @@ class ZonaBDService:
             result = []
             for row in cursor.fetchall():
                 zona = ZonaEntity.convertToZona(json=row)
-                result.append(zona.to_dict())
+                result.append(zona)
             
             if cursor.rowcount == 0:
                 return []
