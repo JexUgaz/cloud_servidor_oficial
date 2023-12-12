@@ -153,7 +153,7 @@ def setNewSlice():
 	
 	result=SliceBDService.setNewSlice(new_id_vlan=new_id_vlan,cnt_nodos= len(slice_entity.vms),nombre_dhcp= name_dhcp,id_topologia=slice_entity.topologia.id,id_infraestructura=InfraestructuraGlobal.linux ,id_usuario=slice_entity.usuario_id,id_subred= id_subred,nombre=slice_entity.nombre )
 	if result:
-		#init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
+		init_DHCP(vlan_id=new_id_vlan,dir_net=subred)
 		ports=[]
 		ips_host=[]
 		#2 VMs hasta 5 VMs
@@ -162,11 +162,11 @@ def setNewSlice():
 			ubicacion=random.randint(0, len(zonas)-1)
 			port_vnc=find_available_portVNC(starting_port)			
 			mac_addr=generar_mac()
-			#output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
-			#stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
-			#port_vnc_worker = int(stdout_value)
+			output=init_VM(vlan_id=new_id_vlan,size_ram=vm.sizeRam,id_worker=ubicacion,path=vm.imagen[0]['path'],mac_addr=mac_addr)			
+			stdout_value = output['stdout'].strip()  # Elimina el carácter de nueva línea
+			port_vnc_worker = int(stdout_value)
 
-			#subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc_worker+5900} ubuntu@{zonas[ubicacion].dir_ip}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+			subprocess.Popen(f"ssh -f -N -L {port_vnc+5900}:localhost:{port_vnc_worker+5900} ubuntu@{zonas[ubicacion].dir_ip}&",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 			ports.append(port_vnc+5900)
 			ips_host.append(zonas[ubicacion].dir_ip)
