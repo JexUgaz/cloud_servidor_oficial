@@ -48,6 +48,7 @@ def setNewImage():
 		if out2:
 			return jsonify({'result':MensajeResultados.failed,'msg':f'Ya existe descargado esta imagen: {name_image}'})
 		else:
+			runCommand("grep -qxF 'nameserver 8.8.8.8' /etc/resolv.conf || echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf")
 			runCommand(f"wget {link} && mkdir -p ~/imagenes/{idUser} && mv {name_image} ~/imagenes/{idUser}/")
 			runCommand(f"sh -c '. ~/env-scripts/admin-openrc; glance image-create --name \"{nombre}\" --file ~/../home/ubuntu/imagenes/{idUser}/{name_image} --disk-format qcow2 --container-format bare --visibility=public'")
 			path=runCommand(f'find / -type f -name "{name_image}" -path "*{idUser}*"')
