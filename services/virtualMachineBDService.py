@@ -79,7 +79,6 @@ class VirtualMachineBDService:
             """
             cursor.execute(query, (id_vlan,))
             vms_json = cursor.fetchall()
-            print(f"vms_json: {vms_json}")
             vm = [
                 VirtualMachineEntity(id=vm['id'],nombre=vm['nombre'],sizeRam=vm['size_ram'],fechaCreacion=vm['fecha_creacion'],dirMac=vm['dir_mac'],portVNC=vm['port_vnc'],zonaID=vm['zona'],imagen=None)
                 for vm in vms_json

@@ -152,6 +152,31 @@ def getAllTopologias():
 			'msg':'Se encontró exitosamente las topologías!',
 			'topologias':topologias
 		})
+	
+
+@user_routes.route('/getAllVMs',methods=['GET'])
+def getAllVirtualMachines():
+	idSlice=request.args.get("idSlice")
+	slice=SliceBDService.getSliceByID(idSlice)
+	if(slice is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'Ups! Ocurrió un error'
+		})
+	elif (slice.id_vlan is None):
+		return jsonify({
+			'result':MensajeResultados.failed,
+			'msg':'No existe el slice!'
+		})
+	else:
+		vms=VirtualMachineBDService.getVMBySlice(idSlice)
+		vms_json=[vm.to_dict() for vm in vms]
+		return jsonify({
+				'result':MensajeResultados.success,
+				'msg':'Se limpió exitosamente!',
+				'vms':vms_json
+			})
+	
 
 
 @user_routes.route('/deleteSlice',methods=['GET'])
